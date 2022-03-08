@@ -2,6 +2,16 @@
   "plugins": ["prettier", "@typescript-eslint"],
   "extends": ["airbnb-typescript", "react-app", "prettier"],
   "parser": "@typescript-eslint/parser",
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".ts", ".tsx"],
+      },
+      "typescript": {
+        "alwaysTryTypes": true,
+      },
+    },
+  },
   "parserOptions": {
     "project": "./tsconfig.json"
   },

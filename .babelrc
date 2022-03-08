@@ -11,12 +11,6 @@
   ],
   "plugins": [
     [
-      "@babel/plugin-transform-runtime",
-      {
-        "regenerator": true
-      }
-    ],
-    [
       "module-resolver",
       {
         "root": [
@@ -27,9 +21,6 @@
           ".tsx"
         ],
         "alias": {
-          "@api": "./src/api",
-          "@components": "./src/components",
-          "@state": "./src/state"
         }
       }
     ]
