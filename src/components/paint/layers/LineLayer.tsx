@@ -4,10 +4,9 @@ import { Layer, Line } from 'react-konva';
 
 interface Props {
   lines: Konva.LineConfig[];
-  paintColor?: string;
 }
 
-const LineLayer: React.FC<Props> = ({ lines, paintColor }) => {
+const LineLayer: React.FC<Props> = ({ lines }) => {
   return (
     <Layer>
       {lines.map((value, i) => (

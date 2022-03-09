@@ -1,73 +1,77 @@
 import Konva from 'konva';
-import React from 'react'
-import { Stage, Layer, Line, Text } from 'react-konva';
-import { Wrapper } from './Draw.style';
+import React, { useState } from 'react'
+import { Stage, Layer, Line, Text, Rect } from 'react-konva';
 
 const Draw = () => {
-  const [tool, setTool] = React.useState('pen');
-  const [lines, setLines] = React.useState<Konva.LineConfig[]>([]);
-  const isDrawing = React.useRef(false);
+  const [annotations, setAnnotations] = useState<Konva.RectConfig[]>([]);
+  const [newAnnotation, setNewAnnotation] = useState<Konva.RectConfig[]>([]);
 
-  const handleMouseDown = (e: any) => {
-    isDrawing.current = true;
-    const pos = e.target.getStage().getPointerPosition();
-    setLines([...lines, { tool, points: [pos.x, pos.y] }]);
-  };
-
-  const handleMouseMove = (e: any) => {
-    if (!isDrawing.current) {
-      return;
+  const handleMouseDown = (event: any) => {
+    if (newAnnotation.length === 0) {
+      const { x, y } = event.target.getStage().getPointerPosition();
+      setNewAnnotation([{ x, y, width: 0, height: 0, key: "0" }]);
     }
-    const stage = e.target.getStage();
-    const point = stage.getPointerPosition();
-    let lastLine = lines[lines.length - 1];
-    lastLine.points = lastLine.points?.concat([point.x, point.y]);
-    lines.splice(lines.length - 1, 1, lastLine);
-    setLines(lines.concat());
   };
 
-  const handleMouseUp = () => {
-    isDrawing.current = false;
+  const handleMouseUp = (event: any) => {
+    if (newAnnotation.length === 1) {
+      const sx = newAnnotation[0].x as number;
+      const sy = newAnnotation[0].y as number;
+      const { x, y } = event.target.getStage().getPointerPosition();
+      const annotationToAdd = {
+        x: sx,
+        y: sy,
+        width: x - sx,
+        height: y - sy,
+        key: annotations.length + 1
+      };
+      annotations.push(annotationToAdd);
+      setNewAnnotation([]);
+      setAnnotations(annotations);
+    }
   };
 
+  const handleMouseMove = (event: any) => {
+    if (newAnnotation.length === 1) {
+      const sx = newAnnotation[0].x as number;
+      const sy = newAnnotation[0].y as number;
+      const { x, y } = event.target.getStage().getPointerPosition();
+      setNewAnnotation([
+        {
+          x: sx,
+          y: sy,
+          width: x - sx,
+          height: y - sy,
+          key: "0"
+        }
+      ]);
+    }
+  };
+
+  const annotationsToDraw = [...annotations, ...newAnnotation];
   return (
-    <div>
-      <Wrapper>
-        <Stage
-          className="screen"
-          width={window.innerWidth}
-          heigth={window.innerHeight}
-          onMouseDown={handleMouseDown}
-          onMousemove={handleMouseMove}
-          onMouseup={handleMouseUp}
-        >
-          <Layer>
-            {lines.map((line, i) => (
-              <Line
-                key={i}
-                points={line.points}
-                stroke="#df4b26"
-                strokeWidth={5}
-                tension={0.3}
-                lineCap="round"
-                globalCompositeOperation={
-                  line.tool === 'eraser' ? 'destination-out' : 'source-over'
-                }
-              />
-            ))}
-          </Layer>
-        </Stage>
-      </Wrapper>
-      <select
-        value={tool}
-        onChange={(e) => {
-          setTool(e.target.value);
-        }}
-      >
-        <option value="pen">Pen</option>
-        <option value="eraser">Eraser</option>
-      </select>
-    </div>
+    <Stage
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+      onMouseMove={handleMouseMove}
+      width={900}
+      height={700}
+    >
+      <Layer>
+        {annotationsToDraw.map(value => {
+          return (
+            <Rect
+              x={value.x}
+              y={value.y}
+              width={value.width}
+              height={value.height}
+              fill="transparent"
+              stroke="black"
+            />
+          );
+        })}
+      </Layer>
+    </Stage>
   );
 }
 

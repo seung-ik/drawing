@@ -7,6 +7,7 @@ import useWindowSize from 'src/hooks/useWindowResize';
 import LineLayer from './layers/LineLayer';
 import { Buttons, Wrapper } from './Paint.style';
 import RectangleLayer from './layers/RectangleLayer';
+import CircleLayer from './layers/CircleLayer';
 
 const Paint = () => {
   const [lines, setLines] = useState<Konva.LineConfig[]>([]);
@@ -15,15 +16,14 @@ const Paint = () => {
   const [newRect, setNewRect] = useState<Konva.RectConfig[]>([]);
   const rectangles: Konva.RectConfig[] = [...prevRects, ...newRect];
 
+  const [prevCircles, setPrevCircles] = useState<Konva.CircleConfig[]>([]);
+  const [newCircle, setNewCircle] = useState<Konva.CircleConfig[]>([]);
+  const circles: Konva.CircleConfig[] = [...prevCircles, ...newCircle];
+
   const [tool, setTool] = useState('line');
   const [paintColor, setPaintColor] = useState('black');
   const isDrawing = useRef(false);
   const windowSize = useWindowSize();
-
-  const handleDrawingTool = (e: React.MouseEvent<HTMLElement>) => {// recoil 로 상태관리하ㅗ 컴포넌트 분리해주기
-    const element = e.target as HTMLButtonElement
-    setTool(element.value)
-  }
 
   const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => { //나중에 함수만들어서 컴포넌트에서 가져다가 쓰기
     isDrawing.current = true;
@@ -38,10 +38,13 @@ const Paint = () => {
         break;
       case 'rectangle':
         if (newRect.length === 0) {
-          setNewRect([{ x, y, width: 0, height: 0, strokeColor: paintColor, key: "0" }]);
+          setNewRect([{ x, y, width: 0, height: 0, key: "0" }]);
         }
         break;
       case 'circle':
+        if (newCircle.length === 0) {
+          setNewCircle([{ x, y, radius: 0, key: "0" }]);
+        }
         break;
       default:
         setLines([...lines, { tool, points: [x, y] }]);
@@ -49,7 +52,7 @@ const Paint = () => {
   };
 
   const handleMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
-    if (!isDrawing.current && tool === 'line') { //이거드로잉 툴별로 check 필요ㅗ
+    if ((!isDrawing.current && tool === 'line')) { //이거드로잉 툴별로 check 필요ㅗ
       return;
     }
 
@@ -82,6 +85,19 @@ const Paint = () => {
         }
         break;
       case 'circle':
+        if (newCircle.length === 1) {
+          const startX = newCircle[0].x as number;
+          const startY = newCircle[0].y as number;
+          setNewCircle([
+            {
+              x: startX,
+              y: startY,
+              radius: Math.sqrt(Math.pow((startX - x), 2) + Math.pow((startY - y), 2)),
+              key: "0",
+              strokeColor: paintColor
+            }
+          ]);
+        }
         break;
       default:
         lastLine.points = lastLine.points?.concat([x, y]);
@@ -117,10 +133,28 @@ const Paint = () => {
         }
         break;
       case 'circle':
+        if (newCircle.length === 1) {
+          const startX = newCircle[0].x as number;
+          const startY = newCircle[0].y as number;
+          const completedCircle = {
+            x: startX,
+            y: startY,
+            radius: Math.sqrt(Math.pow((startX - x), 2) + Math.pow((startY - y), 2)),
+            key: prevCircles.length + 1,
+            strokeColor: paintColor
+          };
+          setNewCircle([]);
+          setPrevCircles(prev => prev.concat(completedCircle));
+        }
         break;
       default:
     }
   };
+
+  const handleDrawingTool = (e: React.MouseEvent<HTMLElement>) => {// recoil 로 상태관리하ㅗ 컴포넌트 분리해주기
+    const element = e.target as HTMLButtonElement
+    setTool(element.value)
+  }
 
   const handleChangePaintColor = (e: any) => { // tool 관련 컴포넌트 만들고 거기로 이동, recoil
     setPaintColor(e.hex)
@@ -136,9 +170,9 @@ const Paint = () => {
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
       >
-        <LineLayer lines={lines} paintColor={paintColor} />
-        <RectangleLayer rectangles={rectangles} paintColor={paintColor} />
-
+        <LineLayer lines={lines} />
+        <RectangleLayer rectangles={rectangles} />
+        <CircleLayer circles={circles} />
       </Stage>
       <div className="set-tools">
         <ColorPicker
