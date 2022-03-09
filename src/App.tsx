@@ -7,14 +7,11 @@ import Paint from './components/paint/Paint';
 
 function App() {
   return (
-    <div>
-      <div>alksjdfal</div>
-      <Switch>
-        <Route exact path="/" component={Main} />
-        <Route path="/paint" component={Paint} />
-        <Route path="/draw" component={Draw} />
-      </Switch>
-    </div>
+    <Switch>
+      <Route exact path="/" component={Main} />
+      <Route path="/paint" component={Paint} />
+      <Route path="/draw" component={Draw} />
+    </Switch>
   );
 }
 
