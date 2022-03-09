@@ -1,8 +1,8 @@
 import Konva from 'konva';
 import React, { useState, useRef } from 'react'
 import { default as ColorPicker } from 'react-color/lib/components/circle/Circle';
-import { Stage } from 'react-konva';
-import { COLOR_PICKER_LIST } from 'src/asset';
+import { Layer, Line, Rect, Stage } from 'react-konva';
+import { calcDistanceTwoDots, COLOR_PICKER_LIST } from 'src/asset';
 import useWindowSize from 'src/hooks/useWindowResize';
 import LineLayer from './layers/LineLayer';
 import { Buttons, Wrapper } from './Paint.style';
@@ -20,6 +20,11 @@ const Paint = () => {
   const [newCircle, setNewCircle] = useState<Konva.CircleConfig[]>([]);
   const circles: Konva.CircleConfig[] = [...prevCircles, ...newCircle];
 
+  const [polygonLine, setPolygonLine] = useState<Konva.LineConfig>();
+  const [polygons, setPolygons] = useState<Konva.LineConfig[]>([]);
+  const [polygonDots, setPolygonDots] = useState<Konva.RectConfig[]>([]);
+  const [isStartPointHover, setIsStartPointHover] = useState<boolean>(false);
+
   const [tool, setTool] = useState('line');
   const [paintColor, setPaintColor] = useState('black');
   const isDrawing = useRef(false);
@@ -30,11 +35,30 @@ const Paint = () => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (tool) {
       case 'line':
-        setLines([...lines, { tool, points: [x, y], strokeColor: paintColor }]);
+        setLines([...lines, { points: [x, y], strokeColor: paintColor }]);
         break;
       case 'arc':
         break;
       case 'polygon':
+        if (isStartPointHover && polygonDots.length > 2) {
+          setIsStartPointHover(false)
+          setPolygons(prev => prev.concat(polygonLine as Konva.LineConfig))
+          setPolygonDots([]);
+          setPolygonLine({});
+          console.log(1)
+        } else if (polygonDots.length === 0) {
+          setPolygonLine({ points: [x, y], strokeColor: paintColor })
+          setPolygonDots([{ x, y }]);
+          console.log(2)
+        } else if (polygonDots.length > 0) {
+          setPolygonLine(prev => {
+            const prevPoint = prev?.points as [number, number];
+            const newPoints = prevPoint.concat([x, y])
+            return { ...prev, points: newPoints };
+          })
+          setPolygonDots(prev => prev.concat([{ x, y }]));
+          console.log(3)
+        }
         break;
       case 'rectangle':
         if (newRect.length === 0) {
@@ -47,7 +71,7 @@ const Paint = () => {
         }
         break;
       default:
-        setLines([...lines, { tool, points: [x, y] }]);
+        setLines([...lines, { points: [x, y], strokeColor: paintColor }]);
     }
   };
 
@@ -92,7 +116,7 @@ const Paint = () => {
             {
               x: startX,
               y: startY,
-              radius: Math.sqrt(Math.pow((startX - x), 2) + Math.pow((startY - y), 2)),
+              radius: calcDistanceTwoDots(startX, startY, x, y),
               key: "0",
               strokeColor: paintColor
             }
@@ -139,7 +163,7 @@ const Paint = () => {
           const completedCircle = {
             x: startX,
             y: startY,
-            radius: Math.sqrt(Math.pow((startX - x), 2) + Math.pow((startY - y), 2)),
+            radius: calcDistanceTwoDots(startX, startY, x, y),
             key: prevCircles.length + 1,
             strokeColor: paintColor
           };
@@ -151,6 +175,14 @@ const Paint = () => {
     }
   };
 
+  const handleMouseOver = (e: any) => {
+    e.target.scale({ x: 2.5, y: 2.5 });
+    setIsStartPointHover(true)
+  }
+  const handleMouseOut = (e: any) => {
+    e.target.scale({ x: 1, y: 1 });
+    setIsStartPointHover(false)
+  }
   const handleDrawingTool = (e: React.MouseEvent<HTMLElement>) => {// recoil 로 상태관리하ㅗ 컴포넌트 분리해주기
     const element = e.target as HTMLButtonElement
     setTool(element.value)
@@ -173,6 +205,44 @@ const Paint = () => {
         <LineLayer lines={lines} />
         <RectangleLayer rectangles={rectangles} />
         <CircleLayer circles={circles} />
+        <Layer>
+          {polygonDots.map((value, i) => {
+            const startPointAttr =
+              i === 0 ? {
+                onMouseOver: handleMouseOver,
+                onMouseOut: handleMouseOut
+              } : null;
+            return (
+              <Rect
+                key={i}
+                x={value.x as number - 5}
+                y={value.y as number - 5}
+                width={10}
+                height={10}
+                fill="white"
+                stroke="black"
+                {...startPointAttr}
+              />
+            );
+          })}
+          {polygonDots.length !== 0 && < Line
+            points={polygonLine?.points}
+            stroke={polygonLine?.strokeColor}
+            strokeWidth={4}
+            closed={false}
+          />}
+          {polygons.map((value, i) => {
+            return (
+              < Line
+                key={i}
+                points={value.points}
+                stroke={value.strokeColor}
+                strokeWidth={4}
+                closed
+              />
+            )
+          })}
+        </Layer>
       </Stage>
       <div className="set-tools">
         <ColorPicker

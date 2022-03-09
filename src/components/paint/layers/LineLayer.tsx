@@ -14,9 +14,9 @@ const LineLayer: React.FC<Props> = ({ lines }) => {
           key={i}
           points={value.points}
           stroke={value.strokeColor}
-          strokeWidth={10}
-          tension={0.3}
-          lineCap="round"
+          strokeWidth={4}
+        // tension={0.3}
+        // lineCap="round"
         // globalCompositeOperation={
         //   value.tool === 'eraser' ? 'destination-out' : 'source-over'
         // }
