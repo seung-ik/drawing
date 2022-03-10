@@ -1,15 +1,16 @@
-import Konva from "konva";
-import { atom, useRecoilState, useSetRecoilState } from "recoil";
+import Konva from 'konva';
+import { atom, useRecoilState, useSetRecoilState } from 'recoil';
+import { paintInfoState } from './paintInfoState';
 
 export const isStartPointHoverState = atom<boolean>({
   key: 'polygonState/isStartPointHover',
   default: false,
-})
+});
 
 export const polygonDotsState = atom<Konva.RectConfig[]>({
   key: 'polygonState/polygonDots',
   default: [],
-})
+});
 
 export const polygonLineState = atom<Konva.LineConfig>({
   key: 'polygonState/polygonLineState',
@@ -26,27 +27,34 @@ export function useDrawPolygon(): any {
   const [polygonDots, setPolygonDots] = useRecoilState(polygonDotsState);
   const [polygonLine, setPolygonLine] = useRecoilState(polygonLineState);
   const setPolygons = useSetRecoilState(polygonsState);
+  const setPaintInfo = useSetRecoilState(paintInfoState);
 
-  const HandlePolygonMouseOver = (e: any) => {
+  const handlePolygonMouseOver = (e: any) => {
     e.target.scale({ x: 2.5, y: 2.5 });
     setIsStartPointHover(true);
   };
 
-  const HandlePolygonMouseOut = (e: any) => {
+  const handlePolygonMouseOut = (e: any) => {
     e.target.scale({ x: 1, y: 1 });
     setIsStartPointHover(false);
   };
 
-  const HandlePolygonMouseDown = (x: number, y: number, paintColor: string) => {
-    if (isStartPointHover && polygonDots.length > 2) { //3번째 클릭이후 이면서 처음 클릭지점을 클릭할때
+  const handlePolygonMouseDown = (x: number, y: number, paintColor: string) => {
+    if (isStartPointHover && polygonDots.length > 2) {
+      //3번째 클릭이후 이면서 처음 클릭지점을 클릭할때
       setIsStartPointHover(false);
-      setPolygons((prev) => prev.concat(polygonLine as Konva.LineConfig));
+      setPolygons((prev) => prev.concat({ ...polygonLine, closed: true } as Konva.LineConfig));
+      setPaintInfo((prev: any) => {
+        return prev.concat({ ...polygonLine, closed: true });
+      });
       setPolygonDots([]);
       setPolygonLine({});
-    } else if (polygonDots.length === 0) { // 다각형타입에서 처음 눌렀을때
-      setPolygonLine({ points: [x, y], strokeColor: paintColor });
+    } else if (polygonDots.length === 0) {
+      // 다각형타입에서 처음 눌렀을때
+      setPolygonLine({ points: [x, y], strokeColor: paintColor, closed: false });
       setPolygonDots([{ x, y }]);
-    } else if (polygonDots.length > 0) { // 2번째 눌렀을때 부터 ..
+    } else if (polygonDots.length > 0) {
+      // 2번째 눌렀을때 부터 ..
       setPolygonDots((prev) => prev.concat([{ x, y }]));
       setPolygonLine((prev) => {
         const prevPoint = prev?.points as [number, number];
@@ -56,5 +64,5 @@ export function useDrawPolygon(): any {
     }
   };
 
-  return { HandlePolygonMouseDown, HandlePolygonMouseOut, HandlePolygonMouseOver };
+  return { handlePolygonMouseDown, handlePolygonMouseOut, handlePolygonMouseOver };
 }

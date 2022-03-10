@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import React, { useState } from 'react'
-import { Stage, Layer, Line, Text, Rect } from 'react-konva';
+import { Stage, Layer, Line, Text, Rect, RegularPolygon } from 'react-konva';
 
 const Draw = () => {
   const [annotations, setAnnotations] = useState<Konva.RectConfig[]>([]);
@@ -50,26 +50,9 @@ const Draw = () => {
 
   const annotationsToDraw = [...annotations, ...newAnnotation];
   return (
-    <Stage
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      width={900}
-      height={700}
-    >
+    <Stage width={window.innerWidth} height={window.innerHeight}>
       <Layer>
-        {annotationsToDraw.map(value => {
-          return (
-            <Rect
-              x={value.x}
-              y={value.y}
-              width={value.width}
-              height={value.height}
-              fill="transparent"
-              stroke="black"
-            />
-          );
-        })}
+        <RegularPolygon radius={30} sides={10} x={100} y={100} width={100} height={100} fill="red" shadowBlur={5} />
       </Layer>
     </Stage>
   );

@@ -15,6 +15,7 @@ const LineLayer: React.FC<Props> = ({ lines }) => {
           points={value.points}
           stroke={value.strokeColor}
           strokeWidth={4}
+          closed={value.closed}
         // tension={0.3}
         // lineCap="round"
         // globalCompositeOperation={

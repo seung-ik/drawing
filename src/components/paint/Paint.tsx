@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react'
-import { useRecoilValue } from 'recoil';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Stage } from 'react-konva';
 import Konva from 'konva';
 import useWindowSize from 'src/hooks/useWindowResize';
@@ -13,21 +13,26 @@ import RectangleLayer from './layers/RectangleLayer';
 import CircleLayer from './layers/CircleLayer';
 import { Wrapper } from './Paint.style';
 import { rectanglesState, useDrawRectangle } from 'src/state/rectangleState';
+import { paintInfoState } from 'src/state/paintInfoState';
+import { linesState, useDrawLine } from 'src/state/lineState';
 
 const Paint = () => {
   const windowSize = useWindowSize();
   const drawingType = useRecoilValue(drawingTypeState);
   const strokeColor = useRecoilValue(strokeColorState);
+  const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
 
-  const [lines, setLines] = useState<Konva.LineConfig[]>([]);
-  const isDrawing = useRef(false);
+  // const [lines, setLines] = useState<Konva.LineConfig[]>([]);
+  // const isDrawing = useRef(false);
+  const lines = useRecoilValue(linesState);
+  const { handleLineMouseDown, handleLineMouseMove, handleLineMouseUp } = useDrawLine()
 
   const rectangles = useRecoilValue(rectanglesState);
   const circles = useRecoilValue(circlesState);
   const polygonDots = useRecoilValue(polygonDotsState);
   const polygonLine = useRecoilValue(polygonLineState);
   const polygons = useRecoilValue(polygonsState);
-  const { handleRectMouseDown, handleRectMouseMove, handleRectMouseUp} = useDrawRectangle();
+  const { handleRectMouseDown, handleRectMouseMove, handleRectMouseUp } = useDrawRectangle();
   const { handleCircleMouseDown, handleCircleMouseMove, handleCircleMouseUp } = useDrawCircle();
   const { handlePolygonMouseDown, handlePolygonMouseOver, handlePolygonMouseOut } = useDrawPolygon();
 
@@ -35,8 +40,7 @@ const Paint = () => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
       case 'line':
-        isDrawing.current = true;
-        setLines([...lines, { points: [x, y], strokeColor }]);
+        handleLineMouseDown(x, y, strokeColor)
         break;
       case 'curve':
         break;
@@ -55,16 +59,9 @@ const Paint = () => {
 
   const handleMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
-  
     switch (drawingType) {
       case 'line':
-        if (!isDrawing.current) {
-          return;
-        }
-        let lastLine = lines[lines.length - 1];
-        lastLine.points = lastLine.points?.concat([x, y]);
-        lines.splice(lines.length - 1, 1, lastLine);
-        setLines(lines.concat());
+        handleLineMouseMove(x, y)
         break;
       case 'curve':
         break;
@@ -84,7 +81,7 @@ const Paint = () => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
       case 'line':
-        isDrawing.current = false;
+        handleLineMouseUp(x, y)
         break;
       case 'curve':
         break;
@@ -99,6 +96,17 @@ const Paint = () => {
       default:
     }
   };
+
+  useLayoutEffect(() => {
+    const savedPaintInfo = sessionStorage.getItem('paintInfo');
+    if (savedPaintInfo) {
+      setPaintInfo(JSON.parse(savedPaintInfo));
+    }
+  }, []);
+
+  useEffect(() => {
+    sessionStorage.setItem('paintInfo', JSON.stringify(paintInfo));
+  }, [paintInfo]);
 
   return (
     <Wrapper>

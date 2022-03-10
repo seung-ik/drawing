@@ -1,5 +1,6 @@
 import Konva from "konva";
-import { atom, selector, useRecoilState } from "recoil";
+import { atom, selector, useRecoilState, useSetRecoilState } from "recoil";
+import { paintInfoState } from "./paintInfoState";
 
 export const prevRectsState = atom<Konva.RectConfig[]>({
   key: 'rectangleState/prevRects',
@@ -14,15 +15,18 @@ export const newRectState = atom<Konva.RectConfig[]>({
 export const rectanglesState = selector<Konva.RectConfig[]>({
   key: 'rectangleState/rectanglesState',
   get: ({ get }) => {
+    const savedRects = get(paintInfoState)
     const prevRects = get(prevRectsState);
     const newRect = get(newRectState);
-    return [...prevRects, ...newRect]; 
+
+    return [...savedRects,...prevRects, ...newRect]; 
   },
 });
 
 export const useDrawRectangle = () => {
   const [newRect, setNewRect] = useRecoilState(newRectState);
   const [prevRects, setPrevRects] = useRecoilState(prevRectsState);
+  const setPaintInfo = useSetRecoilState(paintInfoState)
 
   const handleRectMouseDown = (x: number, y: number) => {
     if (newRect.length === 0) {
@@ -61,6 +65,7 @@ export const useDrawRectangle = () => {
       };
       setNewRect([]);
       setPrevRects((prev) => prev.concat(completedRect));
+      setPaintInfo((prev: any) => prev.concat(completedRect));
     }
   };
 

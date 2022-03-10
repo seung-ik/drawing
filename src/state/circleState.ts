@@ -1,6 +1,7 @@
-import Konva from "konva";
-import { atom, selector, useRecoilState } from "recoil";
-import { calcDistanceTwoDots } from "src/asset";
+import Konva from 'konva';
+import { atom, selector, useRecoilState, useSetRecoilState } from 'recoil';
+import { calcDistanceTwoDots } from 'src/asset';
+import { paintInfoState } from './paintInfoState';
 
 export const prevCirclesState = atom<Konva.CircleConfig[]>({
   key: 'circleState/prevCircles',
@@ -15,15 +16,17 @@ export const newCircleState = atom<Konva.CircleConfig[]>({
 export const circlesState = selector<Konva.CircleConfig[]>({
   key: 'circleState/circles',
   get: ({ get }) => {
+    const savedRects = get(paintInfoState);
     const prevCircles = get(prevCirclesState);
     const newCircle = get(newCircleState);
-    return [...prevCircles, ...newCircle]; 
+    return [...savedRects, ...prevCircles, ...newCircle];
   },
 });
 
 export const useDrawCircle = () => {
   const [newCircle, setNewCircle] = useRecoilState(newCircleState);
   const [prevCircles, setPrevCircles] = useRecoilState(prevCirclesState);
+  const setPaintInfo = useSetRecoilState(paintInfoState);
 
   const handleCircleMouseDown = (x: number, y: number) => {
     if (newCircle.length === 0) {
@@ -60,8 +63,9 @@ export const useDrawCircle = () => {
       };
       setNewCircle([]);
       setPrevCircles((prev) => prev.concat(completedCircle));
+      setPaintInfo((prev: any) => prev.concat(completedCircle));
     }
   };
 
   return { handleCircleMouseDown, handleCircleMouseMove, handleCircleMouseUp };
-}
+};
