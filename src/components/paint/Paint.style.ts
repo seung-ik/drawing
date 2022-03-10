@@ -12,7 +12,7 @@ export const Wrapper = styled('div')`
     border: 2px solid purple;
   }
 
-  & > .set-tools {
+  & > .tools {
     display: flex;
     width: 90%;
     border: 2px solid green;
