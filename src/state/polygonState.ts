@@ -1,5 +1,6 @@
 import Konva from 'konva';
-import { atom, useRecoilState } from 'recoil';
+import { atom, useRecoilState, useSetRecoilState } from 'recoil';
+import { newLineState } from './lineState';
 import { paintInfoState } from './paintInfoState';
 
 export const isStartPointHoverState = atom<boolean>({
@@ -22,6 +23,7 @@ export function useDrawPolygon(): any {
   const [polygonDots, setPolygonDots] = useRecoilState(polygonDotsState);
   const [polygonLine, setPolygonLine] = useRecoilState(polygonLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
+  const setTempLine = useSetRecoilState(newLineState);
 
   const handlePolygonMouseOver = (e: any) => {
     e.target.scale({ x: 2.5, y: 2.5 });
@@ -46,6 +48,7 @@ export function useDrawPolygon(): any {
       setIsStartPointHover(false);
       setPolygonDots([]);
       setPolygonLine({});
+      setTempLine([]);
     } else if (polygonDots.length === 0) {
       setPolygonLine({ points: [x, y], strokeColor, closed: false, key: '0' });
       setPolygonDots([{ x, y }]);
@@ -53,11 +56,18 @@ export function useDrawPolygon(): any {
       setPolygonDots((prev) => prev.concat([{ x, y }]));
       setPolygonLine((prev) => {
         const newPoints = prev.points?.concat([x, y]);
-        const completedLine = { ...prev, points: newPoints};
+        const completedLine = { ...prev, points: newPoints };
         return completedLine;
       });
     }
   };
 
-  return { handlePolygonMouseDown, handlePolygonMouseOut, handlePolygonMouseOver };
+  const handlePolygonMouseMove = (x: number, y: number, strokeColor: string) => {
+    if (polygonDots.length > 0) {
+      const lastPoint = polygonLine.points?.slice(polygonLine.length - 2);
+      setTempLine([{ points: lastPoint?.concat([x, y]), strokeColor, closed: false, key: '0' }]);
+    }
+  };
+
+  return { handlePolygonMouseDown, handlePolygonMouseOut, handlePolygonMouseOver, handlePolygonMouseMove };
 }

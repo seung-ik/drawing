@@ -1,5 +1,6 @@
 import Konva from 'konva';
-import { atom, useRecoilState } from 'recoil';
+import { atom, useRecoilState, useSetRecoilState } from 'recoil';
+import { newLineState } from './lineState';
 import { paintInfoState } from './paintInfoState';
 
 export const isEndPointHoverState = atom<boolean>({
@@ -22,6 +23,7 @@ export function useDrawCurveLine(): any {
   const [curveLineDots, setCurveLineDots] = useRecoilState(curveLineDotsState);
   const [curveLine, setCurveLine] = useRecoilState(curveLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
+  const setTempLine = useSetRecoilState(newLineState);
 
   const handleCurveLineMouseOver = (e: any) => {
     e.target.scale({ x: 2.5, y: 2.5 });
@@ -45,6 +47,7 @@ export function useDrawCurveLine(): any {
       setIsEndPointHover(false);
       setCurveLineDots([]);
       setCurveLine({});
+      setTempLine([]);
     } else if (curveLineDots.length === 0) {
       setCurveLine({ points: [x, y], strokeColor, tension: 0.5, bezier: true, key: '0' });
       setCurveLineDots([{ x, y }]);
@@ -52,11 +55,18 @@ export function useDrawCurveLine(): any {
       setCurveLineDots((prev) => prev.concat([{ x, y }]));
       setCurveLine((prev) => {
         const newPoints = prev.points?.concat([x, y]);
-        const completedLine = { ...prev, points: newPoints};
+        const completedLine = { ...prev, points: newPoints };
         return completedLine;
       });
     }
   };
 
-  return { handleCurveLineMouseDown, handleCurveLineMouseOut, handleCurveLineMouseOver };
+  const handleCurveLineMouseMove = (x: number, y: number, strokeColor: string) => {
+    if (curveLineDots.length > 0) {
+      const lastPoint = curveLine.points;
+      setTempLine([{ points: lastPoint?.concat([x, y]), strokeColor, tension: 0.5, bezier: true, key: '0' }]);
+    }
+  };
+
+  return { handleCurveLineMouseDown, handleCurveLineMouseOut, handleCurveLineMouseOver, handleCurveLineMouseMove };
 }

@@ -24,7 +24,7 @@ const Paint = () => {
   const strokeColor = useRecoilValue(strokeColorState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
 
-  const lines = useRecoilValue(linesState);  
+  const lines = useRecoilValue(linesState);
   const rectangles = useRecoilValue(rectanglesState);
   const circles = useRecoilValue(circlesState);
   const polygonDots = useRecoilValue(polygonDotsState);
@@ -36,8 +36,8 @@ const Paint = () => {
   const { handleLineMouseDown, handleLineMouseMove } = useDrawLine();
   const { handleRectMouseDown, handleRectMouseMove, handleRectMouseUp } = useDrawRectangle();
   const { handleCircleMouseDown, handleCircleMouseMove, handleCircleMouseUp } = useDrawCircle();
-  const { handlePolygonMouseDown, handlePolygonMouseOver, handlePolygonMouseOut } = useDrawPolygon();
-  const { handleCurveLineMouseDown, handleCurveLineMouseOver, handleCurveLineMouseOut } = useDrawCurveLine();
+  const { handlePolygonMouseDown, handlePolygonMouseOver, handlePolygonMouseOut, handlePolygonMouseMove } = useDrawPolygon();
+  const { handleCurveLineMouseDown, handleCurveLineMouseMove, handleCurveLineMouseOver, handleCurveLineMouseOut } = useDrawCurveLine();
 
   const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
@@ -49,7 +49,7 @@ const Paint = () => {
         handleLineMouseDown(x, y, strokeColor);
         break;
       case 'curve':
-        handleCurveLineMouseDown(x,y,strokeColor);
+        handleCurveLineMouseDown(x, y, strokeColor);
         break;
       case 'polygon':
         handlePolygonMouseDown(x, y, strokeColor);
@@ -74,8 +74,10 @@ const Paint = () => {
         handleLineMouseMove(x, y);
         break;
       case 'curve':
+        handleCurveLineMouseMove(x, y, strokeColor)
         break;
       case 'polygon':
+        handlePolygonMouseMove(x, y, strokeColor)
         break;
       case 'rectangle':
         handleRectMouseMove(x, y, strokeColor);
@@ -125,7 +127,7 @@ const Paint = () => {
       <Stage
         className="screen"
         width={windowSize.width * 0.9}
-        height={400}
+        height={windowSize.height * 0.6}
         onMouseDown={handleMouseDown}
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}

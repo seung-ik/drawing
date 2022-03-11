@@ -13,6 +13,7 @@ export const Wrapper = styled('div')`
   }
 
   & > .tools {
+    flex: 1;
     display: flex;
     flex-direction: column;
     width: 90%;
@@ -24,12 +25,10 @@ export const Wrapper = styled('div')`
 export const Buttons = styled('div')<{ color?: string }>`
   display: flex;
   flex: 1;
-  border: 1px solid yellow;
-  
 
-  &  button {
+  & button {
     flex: 1;
-    height: 5rem;
+    height: 100%;
   }
 
   & > .hilight {
