@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { Stage } from 'react-konva';
 import Konva from 'konva';
 import useWindowSize from 'src/hooks/useWindowResize';
-import { polygonDotsState, polygonLineState, polygonsState, useDrawPolygon } from 'src/state/polygonState';
+import { polygonDotsState, polygonLineState, useDrawPolygon } from 'src/state/polygonState';
 import { drawingTypeState, strokeColorState } from 'src/state/toolState';
 import { circlesState, useDrawCircle } from 'src/state/circleState';
 import Tool from './tools/Tool';
@@ -31,7 +31,7 @@ const Paint = () => {
   const circles = useRecoilValue(circlesState);
   const polygonDots = useRecoilValue(polygonDotsState);
   const polygonLine = useRecoilValue(polygonLineState);
-  const polygons = useRecoilValue(polygonsState);
+  // const polygons = useRecoilValue(polygonsState);
   const { handleRectMouseDown, handleRectMouseMove, handleRectMouseUp } = useDrawRectangle();
   const { handleCircleMouseDown, handleCircleMouseMove, handleCircleMouseUp } = useDrawCircle();
   const { handlePolygonMouseDown, handlePolygonMouseOver, handlePolygonMouseOut } = useDrawPolygon();
@@ -124,7 +124,7 @@ const Paint = () => {
         <PolygonLayer
           polygonDots={polygonDots}
           polygonLine={polygonLine}
-          polygons={polygons}
+          // polygons={polygons}
           handleMouseOver={handlePolygonMouseOver}
           handleMouseOut={handlePolygonMouseOut}
         />

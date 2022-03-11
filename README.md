@@ -19,3 +19,5 @@
 곡선 추가
 
 recoil key naming??
+
+toolInfo 만들어서 세션 저장하면 좋을듯
