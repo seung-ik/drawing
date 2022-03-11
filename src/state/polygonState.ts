@@ -42,9 +42,7 @@ export function useDrawPolygon(): any {
         closed: true,
         key: paintInfo.length + 1,
       };
-      setPaintInfo((prev: any) => {
-        return prev.concat(completedPolygon);
-      });
+      setPaintInfo((prev) => prev.concat(completedPolygon));
       setIsStartPointHover(false);
       setPolygonDots([]);
       setPolygonLine({});

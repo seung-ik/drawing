@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import React, { useEffect, useLayoutEffect } from 'react'
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { Stage } from 'react-konva';
 import Konva from 'konva';
 import useWindowSize from 'src/hooks/useWindowResize';
@@ -20,9 +20,9 @@ import { curveLineDotsState, curveLineState, useDrawCurveLine } from 'src/state/
 
 const Paint = () => {
   const windowSize = useWindowSize();
+  const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const drawingType = useRecoilValue(drawingTypeState);
   const strokeColor = useRecoilValue(strokeColorState);
-  const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
 
   const lines = useRecoilValue(linesState);
   const rectangles = useRecoilValue(rectanglesState);
@@ -39,7 +39,7 @@ const Paint = () => {
   const { handlePolygonMouseDown, handlePolygonMouseOver, handlePolygonMouseOut, handlePolygonMouseMove } = useDrawPolygon();
   const { handleCurveLineMouseDown, handleCurveLineMouseMove, handleCurveLineMouseOver, handleCurveLineMouseOut } = useDrawCurveLine();
 
-  const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
+  const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent>): void => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
       case 'pencil':
@@ -64,7 +64,7 @@ const Paint = () => {
     }
   };
 
-  const handleMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
+  const handleMouseMove = (e: Konva.KonvaEventObject<MouseEvent>): void => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
       case 'pencil':
@@ -89,17 +89,11 @@ const Paint = () => {
     }
   };
 
-  const handleMouseUp = (e: Konva.KonvaEventObject<MouseEvent>) => {
+  const handleMouseUp = (e: Konva.KonvaEventObject<MouseEvent>): void => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
       case 'pencil':
         handlePencilMouseUp(x, y)
-        break;
-      case 'line':
-        break;
-      case 'curve':
-        break;
-      case 'polygon':
         break;
       case 'rectangle':
         handleRectMouseUp(x, y, strokeColor);
