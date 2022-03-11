@@ -8,6 +8,7 @@ const Draw = () => {
       <Layer>
         <Line stroke="black" points={[50, 50, 200, 50, 200, 200, 50, 200]} bezier />
         {/* <Line stroke="black" points={[0, 0, 100, 0, 100, 100, 300, 300]} bezier /> */}
+        <RegularPolygon radius={30} sides={10} x={100} y={100} width={100} height={100} fill="red" shadowBlur={5} />
       </Layer>
       <Layer>
         {/* <Text text="Some text on canvas" fontSize={15} />
@@ -16,10 +17,11 @@ const Draw = () => {
         <Line
           x={200}
           y={200}
-          points={[0, 0, 100, 0, 100, 100,300,300]}
-          // tension={0.6}
+          points={[0, 0, 100, 0, 100, 100, 300, 300]}
+          tension={0.5}
           bezier
           stroke="black"
+          draggable
           // fillLinearGradientStartPoint={{ x: -50, y: -50 }}
           // fillLinearGradientEndPoint={{ x: 50, y: 50 }}
           // fillLinearGradientColorStops={[0, 'red', 1, 'yellow']}

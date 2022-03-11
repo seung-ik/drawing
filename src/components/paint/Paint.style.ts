@@ -14,20 +14,22 @@ export const Wrapper = styled('div')`
 
   & > .tools {
     display: flex;
+    flex-direction: column;
     width: 90%;
     border: 2px solid green;
     margin-top: 1rem;
   }
 `;
 
-export const Buttons = styled('div')<{ color: string }>`
+export const Buttons = styled('div')<{ color?: string }>`
   display: flex;
   flex: 1;
   border: 1px solid yellow;
-  margin-left: 3rem;
+  
 
-  & > button {
+  &  button {
     flex: 1;
+    height: 5rem;
   }
 
   & > .hilight {

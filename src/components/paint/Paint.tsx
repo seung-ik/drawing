@@ -14,7 +14,9 @@ import CircleLayer from './layers/CircleLayer';
 import { Wrapper } from './Paint.style';
 import { rectanglesState, useDrawRectangle } from 'src/state/rectangleState';
 import { paintInfoState } from 'src/state/paintInfoState';
-import { linesState, useDrawLine } from 'src/state/lineState';
+import { linesState, useDrawLine, useDrawPencil } from 'src/state/lineState';
+import CurveLineLayer from './layers/CurveLineLayer';
+import { curveLineDotsState, curveLineState, useDrawCurveLine } from 'src/state/curveLineState';
 
 const Paint = () => {
   const windowSize = useWindowSize();
@@ -22,27 +24,32 @@ const Paint = () => {
   const strokeColor = useRecoilValue(strokeColorState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
 
-  // const [lines, setLines] = useState<Konva.LineConfig[]>([]);
-  // const isDrawing = useRef(false);
-  const lines = useRecoilValue(linesState);
-  const { handleLineMouseDown, handleLineMouseMove, handleLineMouseUp } = useDrawLine()
-
+  const lines = useRecoilValue(linesState);  
   const rectangles = useRecoilValue(rectanglesState);
   const circles = useRecoilValue(circlesState);
   const polygonDots = useRecoilValue(polygonDotsState);
   const polygonLine = useRecoilValue(polygonLineState);
-  // const polygons = useRecoilValue(polygonsState);
+  const curveLineDots = useRecoilValue(curveLineDotsState);
+  const curveLine = useRecoilValue(curveLineState);
+
+  const { handlePencilMouseDown, handlePencilMouseMove, handlePencilMouseUp } = useDrawPencil()
+  const { handleLineMouseDown, handleLineMouseMove } = useDrawLine();
   const { handleRectMouseDown, handleRectMouseMove, handleRectMouseUp } = useDrawRectangle();
   const { handleCircleMouseDown, handleCircleMouseMove, handleCircleMouseUp } = useDrawCircle();
   const { handlePolygonMouseDown, handlePolygonMouseOver, handlePolygonMouseOut } = useDrawPolygon();
+  const { handleCurveLineMouseDown, handleCurveLineMouseOver, handleCurveLineMouseOut } = useDrawCurveLine();
 
   const handleMouseDown = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
+      case 'pencil':
+        handlePencilMouseDown(x, y, strokeColor);
+        break;
       case 'line':
-        handleLineMouseDown(x, y, strokeColor)
+        handleLineMouseDown(x, y, strokeColor);
         break;
       case 'curve':
+        handleCurveLineMouseDown(x,y,strokeColor);
         break;
       case 'polygon':
         handlePolygonMouseDown(x, y, strokeColor);
@@ -60,8 +67,11 @@ const Paint = () => {
   const handleMouseMove = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
+      case 'pencil':
+        handlePencilMouseMove(x, y);
+        break;
       case 'line':
-        handleLineMouseMove(x, y)
+        handleLineMouseMove(x, y);
         break;
       case 'curve':
         break;
@@ -80,8 +90,10 @@ const Paint = () => {
   const handleMouseUp = (e: Konva.KonvaEventObject<MouseEvent>) => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
+      case 'pencil':
+        handlePencilMouseUp(x, y)
+        break;
       case 'line':
-        handleLineMouseUp(x, y)
         break;
       case 'curve':
         break;
@@ -121,10 +133,15 @@ const Paint = () => {
         <LineLayer lines={lines} />
         <RectangleLayer rectangles={rectangles} />
         <CircleLayer circles={circles} />
+        <CurveLineLayer
+          curveLineDots={curveLineDots}
+          curveLine={curveLine}
+          handleMouseOver={handleCurveLineMouseOver}
+          handleMouseOut={handleCurveLineMouseOut}
+        />
         <PolygonLayer
           polygonDots={polygonDots}
           polygonLine={polygonLine}
-          // polygons={polygons}
           handleMouseOver={handlePolygonMouseOver}
           handleMouseOut={handlePolygonMouseOut}
         />

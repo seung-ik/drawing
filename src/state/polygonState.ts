@@ -33,7 +33,7 @@ export function useDrawPolygon(): any {
     setIsStartPointHover(false);
   };
 
-  const handlePolygonMouseDown = (x: number, y: number, paintColor: string) => {
+  const handlePolygonMouseDown = (x: number, y: number, strokeColor: string) => {
     if (isStartPointHover && polygonDots.length > 2) {
       const completedPolygon = {
         ...polygonLine,
@@ -47,7 +47,7 @@ export function useDrawPolygon(): any {
       setPolygonDots([]);
       setPolygonLine({});
     } else if (polygonDots.length === 0) {
-      setPolygonLine({ points: [x, y], strokeColor: paintColor, closed: false, key: '0' });
+      setPolygonLine({ points: [x, y], strokeColor, closed: false, key: '0' });
       setPolygonDots([{ x, y }]);
     } else if (polygonDots.length > 0) {
       setPolygonDots((prev) => prev.concat([{ x, y }]));

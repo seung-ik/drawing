@@ -1,10 +1,10 @@
 import { atom } from "recoil";
 
-export type DrawingType = 'line' | 'curve' | 'polygon' | 'rectangle' | 'circle';
+export type DrawingType = 'pencil' | 'line' | 'curve' | 'polygon' | 'rectangle' | 'circle';
 
 export const drawingTypeState = atom<DrawingType>({
   key: 'toolState/drawingType',
-  default: 'line',
+  default: 'pencil',
 })
 
 export const strokeColorState = atom<string>({

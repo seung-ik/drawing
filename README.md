@@ -21,3 +21,5 @@
 recoil key naming??
 
 toolInfo 만들어서 세션 저장하면 좋을듯
+
+다각형 첫번째 포인트 zindex 올리기

@@ -5,14 +5,12 @@ import Konva from 'konva';
 interface Props {
   polygonDots: Konva.RectConfig[];
   polygonLine: Konva.LineConfig;
-  polygons?: Konva.LineConfig[];
   handleMouseOver: (e: any) => void;
   handleMouseOut: (e: any) => void;
 }
 const PolygonLayer: React.FC<Props> = ({
   polygonDots,
   polygonLine,
-  polygons,
   handleMouseOver,
   handleMouseOut,
 }) => {
@@ -24,6 +22,7 @@ const PolygonLayer: React.FC<Props> = ({
             ? {
                 onMouseOver: handleMouseOver,
                 onMouseOut: handleMouseOut,
+                style: { zIndex: 999 },
               }
             : null;
         return (
@@ -42,9 +41,6 @@ const PolygonLayer: React.FC<Props> = ({
       {polygonDots.length !== 0 && (
         <Line points={polygonLine?.points} stroke={polygonLine?.strokeColor} strokeWidth={4} closed={false} />
       )}
-      {/* {polygons.map((value, i) => {
-        return <Line key={i} points={value.points} stroke={value.strokeColor} strokeWidth={4} closed />;
-      })} */}
     </Layer>
   );
 };
