@@ -54,7 +54,7 @@ export const useDrawCircle = () => {
         key: paintInfo.length + 1,
         strokeColor,
       };
-      setPaintInfo((prev: any) => prev.concat(completedCircle));
+      setPaintInfo((prev) => prev.concat(completedCircle));
       setNewCircle([]);
     }
   };

@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import { atom, useRecoilState, useSetRecoilState } from 'recoil';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { newLineState } from './lineState';
 import { paintInfoState } from './paintInfoState';
 
@@ -25,12 +26,12 @@ export function useDrawCurveLine(): any {
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const setTempLine = useSetRecoilState(newLineState);
 
-  const handleCurveLineMouseOver = (e: any) => {
+  const handleCurveLineMouseOver = (e: KonvaEventObject<MouseEvent>) => {
     e.target.scale({ x: 2.5, y: 2.5 });
     setIsEndPointHover(true);
   };
 
-  const handleCurveLineMouseOut = (e: any) => {
+  const handleCurveLineMouseOut = (e: KonvaEventObject<MouseEvent>) => {
     e.target.scale({ x: 1, y: 1 });
     setIsEndPointHover(false);
   };
@@ -41,9 +42,7 @@ export function useDrawCurveLine(): any {
         ...curveLine,
         key: paintInfo.length + 1,
       };
-      setPaintInfo((prev: any) => {
-        return prev.concat(completedCurveLine);
-      });
+      setPaintInfo((prev) => prev.concat(completedCurveLine));
       setIsEndPointHover(false);
       setCurveLineDots([]);
       setCurveLine({});

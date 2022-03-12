@@ -6,7 +6,6 @@ import useWindowSize from 'src/hooks/useWindowResize';
 import { polygonDotsState, polygonLineState, useDrawPolygon } from 'src/state/polygonState';
 import { drawingTypeState, strokeColorState } from 'src/state/toolState';
 import { circlesState, useDrawCircle } from 'src/state/circleState';
-import Tool from './tools/Tool';
 import PolygonLayer from './layers/PolygonLayer';
 import LineLayer from './layers/LineLayer';
 import RectangleLayer from './layers/RectangleLayer';
@@ -17,13 +16,14 @@ import { paintInfoState } from 'src/state/paintInfoState';
 import { linesState, useDrawLine, useDrawPencil } from 'src/state/lineState';
 import CurveLineLayer from './layers/CurveLineLayer';
 import { curveLineDotsState, curveLineState, useDrawCurveLine } from 'src/state/curveLineState';
+import Tools from './tools/Tools';
 
 const Paint = () => {
   const windowSize = useWindowSize();
-  const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const drawingType = useRecoilValue(drawingTypeState);
   const strokeColor = useRecoilValue(strokeColorState);
 
+  const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const lines = useRecoilValue(linesState);
   const rectangles = useRecoilValue(rectanglesState);
   const circles = useRecoilValue(circlesState);
@@ -110,7 +110,7 @@ const Paint = () => {
     if (savedPaintInfo) {
       setPaintInfo(JSON.parse(savedPaintInfo));
     }
-  }, []);
+  }, [setPaintInfo]);
 
   useEffect(() => {
     sessionStorage.setItem('paintInfo', JSON.stringify(paintInfo));
@@ -143,7 +143,7 @@ const Paint = () => {
         />
       </Stage>
       <div className="tools">
-        <Tool strokeColor={strokeColor} drawingType={drawingType} />
+        <Tools strokeColor={strokeColor} drawingType={drawingType} />
       </div>
     </Wrapper>
   );

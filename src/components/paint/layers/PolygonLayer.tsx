@@ -1,12 +1,13 @@
 import React from 'react'
-import { Layer, Line, Rect } from 'react-konva';
 import Konva from 'konva';
+import { Layer, Line, Rect } from 'react-konva';
+import { KonvaEventObject } from 'konva/lib/Node';
 
 interface Props {
   polygonDots: Konva.RectConfig[];
   polygonLine: Konva.LineConfig;
-  handleMouseOver: (e: any) => void;
-  handleMouseOut: (e: any) => void;
+  handleMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
+  handleMouseOut: (e: KonvaEventObject<MouseEvent>) => void;
 }
 const PolygonLayer: React.FC<Props> = ({
   polygonDots,
@@ -20,10 +21,10 @@ const PolygonLayer: React.FC<Props> = ({
         const startPointAttr =
           i === 0
             ? {
-                onMouseOver: handleMouseOver,
-                onMouseOut: handleMouseOut,
-                style: { zIndex: 999 },
-              }
+              onMouseOver: handleMouseOver,
+              onMouseOut: handleMouseOut,
+              style: { zIndex: 999 },
+            }
             : null;
         return (
           <Rect

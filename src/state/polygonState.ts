@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import { atom, useRecoilState, useSetRecoilState } from 'recoil';
+import { KonvaEventObject } from 'konva/lib/Node';
 import { newLineState } from './lineState';
 import { paintInfoState } from './paintInfoState';
 
@@ -25,12 +26,12 @@ export function useDrawPolygon(): any {
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const setTempLine = useSetRecoilState(newLineState);
 
-  const handlePolygonMouseOver = (e: any) => {
+  const handlePolygonMouseOver = (e: KonvaEventObject<MouseEvent>) => {
     e.target.scale({ x: 2.5, y: 2.5 });
     setIsStartPointHover(true);
   };
 
-  const handlePolygonMouseOut = (e: any) => {
+  const handlePolygonMouseOut = (e: KonvaEventObject<MouseEvent>) => {
     e.target.scale({ x: 1, y: 1 });
     setIsStartPointHover(false);
   };

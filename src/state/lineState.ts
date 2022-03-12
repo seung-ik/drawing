@@ -39,7 +39,7 @@ export const useDrawPencil = () => {
   const handlePencilMouseUp = (x: number, y: number) => {
     if (newLine.length === 1) {
       const completedLine = [{ ...newLine[0], key: paintInfo.length + 1 }];
-      setPaintInfo((prev: any) => prev.concat(completedLine));
+      setPaintInfo((prev) => prev.concat(completedLine));
       setNewLine([]);
     }
   };
@@ -59,7 +59,7 @@ export const useDrawLine = () => {
       const completedLine = [
         { points: firstPoint.concat([x, y]), strokeColor, closed: false, key: paintInfo.length + 1 },
       ];
-      setPaintInfo((prev: any) => prev.concat(completedLine));
+      setPaintInfo((prev) => prev.concat(completedLine));
       setTempLine([]);
     }
   };

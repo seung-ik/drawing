@@ -2,8 +2,8 @@ import React from 'react'
 import { ColorResult } from 'react-color';
 import { default as ColorPicker } from 'react-color/lib/components/circle/Circle';
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { COLOR_PICKER_LIST } from 'src/asset';
-import { DrawConfig, paintInfoState, undoListState } from 'src/state/paintInfoState';
+import { COLOR_PICKER_LIST, DRAWING_TYPE } from 'src/asset';
+import { paintInfoState, undoListState } from 'src/state/paintInfoState';
 import { DrawingType, drawingTypeState, strokeColorState } from 'src/state/toolState';
 import { Buttons } from '../Paint.style';
 
@@ -12,7 +12,7 @@ interface Props {
   drawingType: DrawingType;
 }
 
-const Tool: React.FC<Props> = ({ strokeColor, drawingType }) => {
+const Tools: React.FC<Props> = ({ strokeColor, drawingType }) => {
   const setDrawingType = useSetRecoilState(drawingTypeState);
   const setStrokeColor = useSetRecoilState(strokeColorState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
@@ -52,24 +52,11 @@ const Tool: React.FC<Props> = ({ strokeColor, drawingType }) => {
     <>
       <ColorPicker colors={COLOR_PICKER_LIST} color={strokeColor} onChangeComplete={handleStrokeColor} />
       <Buttons onClick={handleDrawingType} color={strokeColor}>
-        <button className={drawingType === 'pencil' ? 'hilight' : ''} value="pencil">
-          연필
-        </button>
-        <button className={drawingType === 'line' ? 'hilight' : ''} value="line">
-          직선
-        </button>
-        <button className={drawingType === 'curve' ? 'hilight' : ''} value="curve">
-          곡선
-        </button>
-        <button className={drawingType === 'polygon' ? 'hilight' : ''} value="polygon">
-          다각형
-        </button>
-        <button className={drawingType === 'rectangle' ? 'hilight' : ''} value="rectangle">
-          사각형
-        </button>
-        <button className={drawingType === 'circle' ? 'hilight' : ''} value="circle">
-          원
-        </button>
+        {Object.keys(DRAWING_TYPE).map((value, i) => (
+          <button key={i} className={drawingType === value ? 'hilight' : ''} value={value}>
+            {DRAWING_TYPE[value as DrawingType]}
+          </button>
+        ))}
       </Buttons>
       <Buttons onClick={handlePaintInfo}>
         <button value="delete">삭제</button>
@@ -80,4 +67,4 @@ const Tool: React.FC<Props> = ({ strokeColor, drawingType }) => {
   );
 };
 
-export default Tool
+export default React.memo(Tools);

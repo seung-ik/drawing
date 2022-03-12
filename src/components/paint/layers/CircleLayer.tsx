@@ -1,5 +1,5 @@
-import Konva from 'konva';
 import React from 'react'
+import Konva from 'konva';
 import { Layer, Circle } from 'react-konva';
 
 interface Props {

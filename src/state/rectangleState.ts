@@ -1,6 +1,6 @@
-import Konva from "konva";
-import { atom, selector, useRecoilState } from "recoil";
-import { paintInfoState } from "./paintInfoState";
+import Konva from 'konva';
+import { atom, selector, useRecoilState } from 'recoil';
+import { paintInfoState } from './paintInfoState';
 
 export const newRectState = atom<Konva.RectConfig[]>({
   key: 'rectangleState/newRect',
@@ -10,9 +10,9 @@ export const newRectState = atom<Konva.RectConfig[]>({
 export const rectanglesState = selector<Konva.RectConfig[]>({
   key: 'rectangleState/rectanglesState',
   get: ({ get }) => {
-    const prevRects = get(paintInfoState)// 필터링 해주는게 좋은가? 흠 ? ㅁ ? ? ? ? / ? ? ? ? ?? 
+    const prevRects = get(paintInfoState); // 필터링 해주는게 좋은가? 흠 ? ㅁ ? ? ? ? / ? ? ? ? ??
     const newRect = get(newRectState);
-    return [...prevRects, ...newRect]; 
+    return [...prevRects, ...newRect];
   },
 });
 
@@ -55,10 +55,10 @@ export const useDrawRectangle = () => {
         key: paintInfo.length + 1,
         strokeColor,
       };
-      setPaintInfo((prev: any) => prev.concat(completedRect));
+      setPaintInfo((prev) => prev.concat(completedRect));
       setNewRect([]);
     }
   };
 
   return { handleRectMouseDown, handleRectMouseMove, handleRectMouseUp };
-}
+};
