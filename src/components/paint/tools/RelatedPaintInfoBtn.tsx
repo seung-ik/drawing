@@ -12,7 +12,8 @@ const RelatedPaintInfoBtn = () => {
   const handlePaintInfo = (e: React.MouseEvent<HTMLElement>) => {
     const element = e.target as HTMLButtonElement;
     if (element.value === "delete") {
-      setPaintInfo([])
+      setPaintInfo([]);
+      setUndoList([]);
     } else if (element.value === 'undo' && isCanUndo) {
       const lastIndex = paintInfo.length - 1
       const lastPaintInfo = paintInfo[lastIndex];
@@ -23,16 +24,14 @@ const RelatedPaintInfoBtn = () => {
       const lastUndoInfo = undoList[lastIndex];
       setPaintInfo(prev => prev.concat(lastUndoInfo));
       setUndoList(prev => prev.slice(0, lastIndex))
-    } else {
-      alert('안되요')
     }
   }
 
   return (
     <Buttons onClick={handlePaintInfo}>
       <button value="delete">삭제</button>
-      <button value="undo">뒤로 돌리기</button>
-      <button value="redo">앞으로 돌리기</button>
+      <button disabled={!isCanUndo} value="undo">뒤로 돌리기</button>
+      <button disabled={!isCanRedo} value="redo">앞으로 돌리기</button>
     </Buttons>
   )
 }

@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
-import { calcDistanceTwoDots } from 'src/asset';
+import { calcDistanceTwoDots } from 'src/utils';
 import { paintInfoState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
@@ -26,7 +26,7 @@ export const useDrawCircle = () => {
 
   const handleCircleMouseDown = (x: number, y: number) => {
     if (newCircle.length === 0) {
-      setNewCircle([{ x, y, radius: 0, key: '0' }]);
+      setNewCircle([{ x, y, radius: 0 }]);
     }
   };
 
@@ -39,9 +39,9 @@ export const useDrawCircle = () => {
           x: startX,
           y: startY,
           radius: calcDistanceTwoDots(startX, startY, x, y),
-          key: '0',
           strokeColor,
           strokeWidth,
+          key: 0,
         },
       ]);
     }

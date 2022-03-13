@@ -1,6 +1,6 @@
 import React from 'react'
-import { Range, getTrackBackground } from "react-range";
 import styled from 'styled-components';
+import { Range, getTrackBackground } from "react-range";
 
 const SliderWrapper = styled('div') <{ min: number, max: number, values: number[] }>`
   height: 2rem;

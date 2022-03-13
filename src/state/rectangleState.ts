@@ -11,7 +11,7 @@ export const newRectState = atom<Konva.RectConfig[]>({
 export const rectanglesState = selector<Konva.RectConfig[]>({
   key: 'rectangleState/rectanglesState',
   get: ({ get }) => {
-    const prevRects = get(paintInfoState); // 필터링 해주는게 좋은가? 흠 ? ㅁ ? ? ? ? / ? ? ? ? ??
+    const prevRects = get(paintInfoState);
     const newRect = get(newRectState);
     return [...prevRects, ...newRect];
   },
@@ -25,7 +25,7 @@ export const useDrawRectangle = () => {
 
   const handleRectMouseDown = (x: number, y: number) => {
     if (newRect.length === 0) {
-      setNewRect([{ x, y, width: 0, height: 0, key: '0' }]);
+      setNewRect([{ x, y, width: 0, height: 0, key: 0 }]);
     }
   };
 
@@ -39,9 +39,9 @@ export const useDrawRectangle = () => {
           y: startY,
           width: x - startX,
           height: y - startY,
-          key: '0',
           strokeColor,
           strokeWidth,
+          key: 0,
         },
       ]);
     }
@@ -56,9 +56,9 @@ export const useDrawRectangle = () => {
         y: startY,
         width: x - startX,
         height: y - startY,
-        key: paintInfo.length + 1,
         strokeColor,
         strokeWidth,
+        key: paintInfo.length + 1,
       };
       setPaintInfo((prev) => prev.concat(completedRect));
       setNewRect([]);

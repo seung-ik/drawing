@@ -5,17 +5,17 @@ export const Wrapper = styled('div')`
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  border: 1px solid red;
   padding: 1rem 0;
 
   & > .screen {
-    border: 2px solid purple;
+    border: 2px solid black;
   }
 
   & > .tools {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     width: 90%;
     margin-top: 1rem;
 
@@ -29,22 +29,28 @@ export const Wrapper = styled('div')`
 
 export const Buttons = styled('div')<{ color?: string }>`
   display: flex;
-  border: 1px solid yellow;
+
   & button {
     flex: 1;
     height: 5rem;
-    border: 1px solid purple;
+    border: 1px solid black;
+    cursor: pointer;
   }
 
   & > .hilight {
-    background-color: ${({ color }) => color};
-    color: white;
+    border: ${({ color }) => `0.5rem solid ${color}`};
+    color: ${({ color }) => color};
+    font-weight: bold;
+  }
+
+  & > button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 `;
 
 export const Options = styled('div')`
   display: flex;
-  border: 1px solid black;
   align-items: center;
   justify-content: space-between;
   padding: 0 1rem;

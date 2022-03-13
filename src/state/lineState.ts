@@ -58,7 +58,7 @@ export const useDrawLine = () => {
 
   const handleLineMouseDown = (x: number, y: number) => {
     if (tempLine.length === 0) {
-      setTempLine([{ points: [x, y], strokeColor, strokeWidth, closed: false, key: '0' }]);
+      setTempLine([{ points: [x, y], strokeColor, strokeWidth, closed: false }]);
     } else if (tempLine.length === 1) {
       const firstPoint = tempLine[0].points?.slice(0, 2) as number[];
       const completedLine = [

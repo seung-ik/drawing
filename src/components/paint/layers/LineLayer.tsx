@@ -9,20 +9,16 @@ interface Props {
 const LineLayer: React.FC<Props> = ({ lines }) => {
   return (
     <Layer>
-      {lines.map((value, i) => (
+      {lines.map((value) => (
         <Line
-          key={i}
+          key={value.key}
           points={value.points}
           stroke={value.strokeColor}
           strokeWidth={value.strokeWidth}
           closed={value.closed}
           tension={value.tension}
           bezier={value.bezier}
-          // tension={0.3}
           lineCap="round"
-        // globalCompositeOperation={
-        //   value.tool === 'eraser' ? 'destination-out' : 'source-over'
-        // }
         />
       ))}
     </Layer>

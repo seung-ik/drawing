@@ -27,7 +27,7 @@ const PolygonLayer: React.FC<Props> = ({
             : null;
         return (
           <Rect
-            key={i}
+            key={value.key}
             x={(value.x as number) - 10}
             y={(value.y as number) - 10}
             width={20}
@@ -39,7 +39,12 @@ const PolygonLayer: React.FC<Props> = ({
         );
       })}
       {polygonDots.length !== 0 && (
-        <Line points={polygonLine.points} stroke={polygonLine.strokeColor} strokeWidth={polygonLine.strokeWidth} closed={false} />
+        <Line
+          points={polygonLine.points}
+          stroke={polygonLine.strokeColor}
+          strokeWidth={polygonLine.strokeWidth}
+          closed={false}
+        />
       )}
     </Layer>
   );

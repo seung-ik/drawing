@@ -20,7 +20,7 @@ export const curveLineState = atom<Konva.LineConfig>({
   default: {},
 });
 
-export function useDrawCurveLine(): any {
+export function useDrawCurveLine() {
   const strokeColor = useRecoilValue(strokeColorState);
   const strokeWidth = useRecoilValue(strokeWidthState)[0];
   const [isEndPointHover, setIsEndPointHover] = useRecoilState(isEndPointHoverState);

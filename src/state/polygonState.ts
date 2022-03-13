@@ -52,7 +52,7 @@ export function useDrawPolygon(): any {
       setPolygonLine({});
       setTempLine([]);
     } else if (polygonDots.length === 0) {
-      setPolygonLine({ points: [x, y], strokeColor, strokeWidth, closed: false, key: '0' });
+      setPolygonLine({ points: [x, y], strokeColor, strokeWidth, closed: false, key: 0 });
       setPolygonDots([{ x, y }]);
     } else if (polygonDots.length > 0) {
       setPolygonDots((prev) => prev.concat([{ x, y }]));
@@ -67,7 +67,7 @@ export function useDrawPolygon(): any {
   const handlePolygonMouseMove = (x: number, y: number) => {
     if (polygonDots.length > 0) {
       const lastPoint = polygonLine.points?.slice(polygonLine.length - 2);
-      setTempLine([{ points: lastPoint?.concat([x, y]), strokeColor, strokeWidth, closed: false, key: '0' }]);
+      setTempLine([{ points: lastPoint?.concat([x, y]), strokeColor, strokeWidth, closed: false, key: 0 }]);
     }
   };
 

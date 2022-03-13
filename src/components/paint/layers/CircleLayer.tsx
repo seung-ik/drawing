@@ -15,12 +15,11 @@ const CircleLayer: React.FC<Props> = ({ circles }) => {
             x={value.x}
             y={value.y}
             radius={value.radius}
-            fill='transparent'
             stroke={value.strokeColor}
             strokeWidth={value.strokeWidth}
-            key={i}
+            fill='transparent'
+            key={value.key}
           />
-
         );
       })}
     </Layer>

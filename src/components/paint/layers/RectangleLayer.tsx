@@ -12,7 +12,7 @@ const RectangleLayer: React.FC<Props> = ({ rectangles }) => {
       {rectangles.map((value, i) => {
         return (
           <Rect
-            key={i}
+            key={value.key}
             x={value.x}
             y={value.y}
             width={value.width}
@@ -21,7 +21,6 @@ const RectangleLayer: React.FC<Props> = ({ rectangles }) => {
             stroke={value.strokeColor}
             strokeWidth={value.strokeWidth}
           />
-
         );
       })}
     </Layer>

@@ -1,7 +1,7 @@
 import React from 'react'
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ColorResult } from 'react-color';
 import { default as ColorPicker } from 'react-color/lib/components/hue/Hue';
-import { useRecoilState, useSetRecoilState } from 'recoil';
 import RangeSlider from 'src/components/articles/RangeSlider';
 import { DrawingType, drawingTypeState, DRAWING_TYPE, strokeColorState, strokeWidthState } from 'src/state/toolState';
 import { Buttons, Options } from '../Paint.style';
@@ -43,7 +43,6 @@ const Tools: React.FC<Props> = ({ strokeColor, drawingType }) => {
         ))}
       </Buttons>
       <RelatedPaintInfoBtn />
-
     </>
   );
 };

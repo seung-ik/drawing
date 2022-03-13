@@ -1,22 +1,22 @@
 import React, { useEffect, useLayoutEffect } from 'react'
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { Stage } from 'react-konva';
 import Konva from 'konva';
+import { Stage } from 'react-konva';
 import useWindowSize from 'src/hooks/useWindowResize';
 import { polygonDotsState, polygonLineState, useDrawPolygon } from 'src/state/polygonState';
 import { drawingTypeState, strokeColorState } from 'src/state/toolState';
 import { circlesState, useDrawCircle } from 'src/state/circleState';
+import { rectanglesState, useDrawRectangle } from 'src/state/rectangleState';
+import { paintInfoState } from 'src/state/paintInfoState';
+import { linesState, useDrawLine, useDrawPencil } from 'src/state/lineState';
+import { curveLineDotsState, curveLineState, useDrawCurveLine } from 'src/state/curveLineState';
 import PolygonLayer from './layers/PolygonLayer';
 import LineLayer from './layers/LineLayer';
 import RectangleLayer from './layers/RectangleLayer';
 import CircleLayer from './layers/CircleLayer';
-import { Wrapper } from './Paint.style';
-import { rectanglesState, useDrawRectangle } from 'src/state/rectangleState';
-import { paintInfoState } from 'src/state/paintInfoState';
-import { linesState, useDrawLine, useDrawPencil } from 'src/state/lineState';
 import CurveLineLayer from './layers/CurveLineLayer';
-import { curveLineDotsState, curveLineState, useDrawCurveLine } from 'src/state/curveLineState';
 import Tools from './tools/Tools';
+import { Wrapper } from './Paint.style';
 
 const Paint = () => {
   const windowSize = useWindowSize();
@@ -24,13 +24,13 @@ const Paint = () => {
   const strokeColor = useRecoilValue(strokeColorState);
 
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
-  const lines = useRecoilValue(linesState);
   const rectangles = useRecoilValue(rectanglesState);
   const circles = useRecoilValue(circlesState);
   const polygonDots = useRecoilValue(polygonDotsState);
   const polygonLine = useRecoilValue(polygonLineState);
   const curveLineDots = useRecoilValue(curveLineDotsState);
   const curveLine = useRecoilValue(curveLineState);
+  const lines = useRecoilValue(linesState);
 
   const { handlePencilMouseDown, handlePencilMouseMove, handlePencilMouseUp } = useDrawPencil()
   const { handleLineMouseDown, handleLineMouseMove } = useDrawLine();
