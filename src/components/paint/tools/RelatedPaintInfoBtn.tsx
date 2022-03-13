@@ -8,6 +8,7 @@ const RelatedPaintInfoBtn = () => {
   const [undoList, setUndoList] = useRecoilState(undoListState);
   const isCanUndo = paintInfo.length > 0 && undoList.length < 40;
   const isCanRedo = undoList.length > 0;
+  const backBtnText = undoList.length > 0 ? `뒤로 돌리기 (${undoList.length}/40)` : '뒤로 돌리기';
 
   const handlePaintInfo = (e: React.MouseEvent<HTMLElement>) => {
     const element = e.target as HTMLButtonElement;
@@ -30,7 +31,7 @@ const RelatedPaintInfoBtn = () => {
   return (
     <Buttons onClick={handlePaintInfo}>
       <button value="delete">삭제</button>
-      <button disabled={!isCanUndo} value="undo">뒤로 돌리기</button>
+      <button disabled={!isCanUndo} value="undo">{backBtnText}</button>
       <button disabled={!isCanRedo} value="redo">앞으로 돌리기</button>
     </Buttons>
   )
