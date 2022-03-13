@@ -28,7 +28,7 @@ const CurveLineLayer: React.FC<Props> = ({
         return <Circle key={i} x={value.x} y={value.y} radius={10} fill="white" stroke="black" {...endPointAttr} />;
       })}
       {curveLineDots.length !== 0 && (
-        <Line points={curveLine?.points} stroke={curveLine?.strokeColor} strokeWidth={4} closed={false} tension={0.5} />
+        <Line points={curveLine.points} stroke={curveLine.strokeColor} strokeWidth={5} closed={false} tension={0.5} />
       )}
     </Layer>
   );

@@ -17,22 +17,35 @@ export const Wrapper = styled('div')`
     display: flex;
     flex-direction: column;
     width: 90%;
-    border: 2px solid green;
     margin-top: 1rem;
+
+    & > .color-picker {
+      height: auto;
+      width: 50%;
+      margin-bottom: 2rem;
+    }
   }
 `;
 
 export const Buttons = styled('div')<{ color?: string }>`
   display: flex;
-  flex: 1;
-
+  border: 1px solid yellow;
   & button {
     flex: 1;
-    height: 100%;
+    height: 5rem;
+    border: 1px solid purple;
   }
 
   & > .hilight {
     background-color: ${({ color }) => color};
     color: white;
   }
+`;
+
+export const Options = styled('div')`
+  display: flex;
+  border: 1px solid black;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
 `;

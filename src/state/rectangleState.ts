@@ -1,6 +1,7 @@
 import Konva from 'konva';
-import { atom, selector, useRecoilState } from 'recoil';
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { paintInfoState } from './paintInfoState';
+import { strokeColorState, strokeWidthState } from './toolState';
 
 export const newRectState = atom<Konva.RectConfig[]>({
   key: 'rectangleState/newRect',
@@ -17,6 +18,8 @@ export const rectanglesState = selector<Konva.RectConfig[]>({
 });
 
 export const useDrawRectangle = () => {
+  const strokeColor = useRecoilValue(strokeColorState);
+  const strokeWidth = useRecoilValue(strokeWidthState)[0];
   const [newRect, setNewRect] = useRecoilState(newRectState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
 
@@ -26,7 +29,7 @@ export const useDrawRectangle = () => {
     }
   };
 
-  const handleRectMouseMove = (x: number, y: number, strokeColor: string) => {
+  const handleRectMouseMove = (x: number, y: number) => {
     if (newRect.length === 1) {
       const startX = newRect[0].x as number;
       const startY = newRect[0].y as number;
@@ -38,12 +41,13 @@ export const useDrawRectangle = () => {
           height: y - startY,
           key: '0',
           strokeColor,
+          strokeWidth,
         },
       ]);
     }
   };
 
-  const handleRectMouseUp = (x: number, y: number, strokeColor: string) => {
+  const handleRectMouseUp = (x: number, y: number) => {
     if (newRect.length === 1) {
       const startX = newRect[0].x as number;
       const startY = newRect[0].y as number;
@@ -54,6 +58,7 @@ export const useDrawRectangle = () => {
         height: y - startY,
         key: paintInfo.length + 1,
         strokeColor,
+        strokeWidth,
       };
       setPaintInfo((prev) => prev.concat(completedRect));
       setNewRect([]);

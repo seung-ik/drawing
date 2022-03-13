@@ -1,6 +1,7 @@
 import Konva from 'konva';
-import { atom, selector, useRecoilState } from 'recoil';
+import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { paintInfoState } from './paintInfoState';
+import { strokeColorState, strokeWidthState } from './toolState';
 
 export const newLineState = atom<Konva.LineConfig[]>({
   key: 'lineState/newLine',
@@ -17,12 +18,14 @@ export const linesState = selector<Konva.LineConfig[]>({
 });
 
 export const useDrawPencil = () => {
+  const strokeColor = useRecoilValue(strokeColorState);
+  const strokeWidth = useRecoilValue(strokeWidthState)[0];
   const [newLine, setNewLine] = useRecoilState(newLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
 
-  const handlePencilMouseDown = (x: number, y: number, strokeColor: string) => {
+  const handlePencilMouseDown = (x: number, y: number) => {
     if (newLine.length === 0) {
-      setNewLine([{ points: [x, y], strokeColor, closed: false, key: '0' }]);
+      setNewLine([{ points: [x, y], strokeColor, strokeWidth, closed: false, key: '0' }]);
     }
   };
 
@@ -48,16 +51,18 @@ export const useDrawPencil = () => {
 };
 
 export const useDrawLine = () => {
+  const strokeColor = useRecoilValue(strokeColorState);
+  const strokeWidth = useRecoilValue(strokeWidthState)[0];
   const [tempLine, setTempLine] = useRecoilState(newLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
 
-  const handleLineMouseDown = (x: number, y: number, strokeColor: string) => {
+  const handleLineMouseDown = (x: number, y: number) => {
     if (tempLine.length === 0) {
-      setTempLine([{ points: [x, y], strokeColor, closed: false, key: '0' }]);
+      setTempLine([{ points: [x, y], strokeColor, strokeWidth, closed: false, key: '0' }]);
     } else if (tempLine.length === 1) {
       const firstPoint = tempLine[0].points?.slice(0, 2) as number[];
       const completedLine = [
-        { points: firstPoint.concat([x, y]), strokeColor, closed: false, key: paintInfo.length + 1 },
+        { points: firstPoint.concat([x, y]), strokeColor, strokeWidth, closed: false, key: paintInfo.length + 1 },
       ];
       setPaintInfo((prev) => prev.concat(completedLine));
       setTempLine([]);

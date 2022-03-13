@@ -17,6 +17,7 @@ const CircleLayer: React.FC<Props> = ({ circles }) => {
             radius={value.radius}
             fill='transparent'
             stroke={value.strokeColor}
+            strokeWidth={value.strokeWidth}
             key={i}
           />
 

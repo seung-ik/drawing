@@ -23,16 +23,15 @@ const PolygonLayer: React.FC<Props> = ({
             ? {
               onMouseOver: handleMouseOver,
               onMouseOut: handleMouseOut,
-              style: { zIndex: 999 },
             }
             : null;
         return (
           <Rect
             key={i}
-            x={(value.x as number) - 5}
-            y={(value.y as number) - 5}
-            width={10}
-            height={10}
+            x={(value.x as number) - 10}
+            y={(value.y as number) - 10}
+            width={20}
+            height={20}
             fill="white"
             stroke="black"
             {...startPointAttr}
@@ -40,7 +39,7 @@ const PolygonLayer: React.FC<Props> = ({
         );
       })}
       {polygonDots.length !== 0 && (
-        <Line points={polygonLine?.points} stroke={polygonLine?.strokeColor} strokeWidth={4} closed={false} />
+        <Line points={polygonLine.points} stroke={polygonLine.strokeColor} strokeWidth={polygonLine.strokeWidth} closed={false} />
       )}
     </Layer>
   );

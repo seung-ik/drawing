@@ -1,8 +1,9 @@
 import Konva from 'konva';
-import { atom, useRecoilState, useSetRecoilState } from 'recoil';
+import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { newLineState } from './lineState';
 import { paintInfoState } from './paintInfoState';
+import { strokeColorState, strokeWidthState } from './toolState';
 
 export const isStartPointHoverState = atom<boolean>({
   key: 'polygonState/isStartPointHover',
@@ -20,6 +21,8 @@ export const polygonLineState = atom<Konva.LineConfig>({
 });
 
 export function useDrawPolygon(): any {
+  const strokeColor = useRecoilValue(strokeColorState);
+  const strokeWidth = useRecoilValue(strokeWidthState)[0];
   const [isStartPointHover, setIsStartPointHover] = useRecoilState(isStartPointHoverState);
   const [polygonDots, setPolygonDots] = useRecoilState(polygonDotsState);
   const [polygonLine, setPolygonLine] = useRecoilState(polygonLineState);
@@ -36,7 +39,7 @@ export function useDrawPolygon(): any {
     setIsStartPointHover(false);
   };
 
-  const handlePolygonMouseDown = (x: number, y: number, strokeColor: string) => {
+  const handlePolygonMouseDown = (x: number, y: number) => {
     if (isStartPointHover && polygonDots.length > 2) {
       const completedPolygon = {
         ...polygonLine,
@@ -49,7 +52,7 @@ export function useDrawPolygon(): any {
       setPolygonLine({});
       setTempLine([]);
     } else if (polygonDots.length === 0) {
-      setPolygonLine({ points: [x, y], strokeColor, closed: false, key: '0' });
+      setPolygonLine({ points: [x, y], strokeColor, strokeWidth, closed: false, key: '0' });
       setPolygonDots([{ x, y }]);
     } else if (polygonDots.length > 0) {
       setPolygonDots((prev) => prev.concat([{ x, y }]));
@@ -61,10 +64,10 @@ export function useDrawPolygon(): any {
     }
   };
 
-  const handlePolygonMouseMove = (x: number, y: number, strokeColor: string) => {
+  const handlePolygonMouseMove = (x: number, y: number) => {
     if (polygonDots.length > 0) {
       const lastPoint = polygonLine.points?.slice(polygonLine.length - 2);
-      setTempLine([{ points: lastPoint?.concat([x, y]), strokeColor, closed: false, key: '0' }]);
+      setTempLine([{ points: lastPoint?.concat([x, y]), strokeColor, strokeWidth, closed: false, key: '0' }]);
     }
   };
 

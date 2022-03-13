@@ -43,16 +43,16 @@ const Paint = () => {
     const { x, y } = (e.target.getStage() as Konva.Stage).getPointerPosition() as Konva.Vector2d;
     switch (drawingType) {
       case 'pencil':
-        handlePencilMouseDown(x, y, strokeColor);
+        handlePencilMouseDown(x, y);
         break;
       case 'line':
-        handleLineMouseDown(x, y, strokeColor);
+        handleLineMouseDown(x, y);
         break;
       case 'curve':
-        handleCurveLineMouseDown(x, y, strokeColor);
+        handleCurveLineMouseDown(x, y);
         break;
       case 'polygon':
-        handlePolygonMouseDown(x, y, strokeColor);
+        handlePolygonMouseDown(x, y);
         break;
       case 'rectangle':
         handleRectMouseDown(x, y);
@@ -74,16 +74,16 @@ const Paint = () => {
         handleLineMouseMove(x, y);
         break;
       case 'curve':
-        handleCurveLineMouseMove(x, y, strokeColor)
+        handleCurveLineMouseMove(x, y)
         break;
       case 'polygon':
-        handlePolygonMouseMove(x, y, strokeColor)
+        handlePolygonMouseMove(x, y)
         break;
       case 'rectangle':
-        handleRectMouseMove(x, y, strokeColor);
+        handleRectMouseMove(x, y);
         break;
       case 'circle':
-        handleCircleMouseMove(x, y, strokeColor);
+        handleCircleMouseMove(x, y);
         break;
       default:
     }
@@ -96,10 +96,10 @@ const Paint = () => {
         handlePencilMouseUp(x, y)
         break;
       case 'rectangle':
-        handleRectMouseUp(x, y, strokeColor);
+        handleRectMouseUp(x, y);
         break;
       case 'circle':
-        handleCircleMouseUp(x, y, strokeColor);
+        handleCircleMouseUp(x, y);
         break;
       default:
     }

@@ -19,6 +19,7 @@ const RectangleLayer: React.FC<Props> = ({ rectangles }) => {
             height={value.height}
             fill="transparent"
             stroke={value.strokeColor}
+            strokeWidth={value.strokeWidth}
           />
 
         );
