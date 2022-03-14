@@ -41,7 +41,7 @@ export function useDrawCurveLine() {
       setCurveLine({});
       setTempLine([]);
     } else if (curveLineDots.length === 0) {
-      setCurveLine({ points: [x, y], strokeColor, strokeWidth, tension: 0.5, bezier: true, key: '0' });
+      setCurveLine({ points: [x, y], strokeColor, strokeWidth, tension: 0.5, bezier: true, key: 0 });
       setCurveLineDots([{ x, y }]);
     } else if (curveLineDots.length > 0) {
       setCurveLineDots((prev) => prev.concat([{ x, y }]));
@@ -57,7 +57,7 @@ export function useDrawCurveLine() {
     if (curveLineDots.length > 0) {
       const lastPoint = curveLine.points;
       setTempLine([
-        { points: lastPoint?.concat([x, y]), strokeColor, strokeWidth, tension: 0.5, bezier: true, key: '0' },
+        { points: lastPoint?.concat([x, y]), strokeColor, strokeWidth, tension: 0.5, bezier: true, key: 0 },
       ]);
     }
   };

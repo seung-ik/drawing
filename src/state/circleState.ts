@@ -36,12 +36,12 @@ export const useDrawCircle = () => {
       const startY = newCircle[0].y as number;
       setNewCircle([
         {
+          key: 0,
           x: startX,
           y: startY,
           radius: calcDistanceTwoDots(startX, startY, x, y),
           strokeColor,
           strokeWidth,
-          key: 0,
         },
       ]);
     }
@@ -52,10 +52,10 @@ export const useDrawCircle = () => {
       const startX = newCircle[0].x as number;
       const startY = newCircle[0].y as number;
       const completedCircle = {
+        key: paintInfo.length + 1,
         x: startX,
         y: startY,
         radius: calcDistanceTwoDots(startX, startY, x, y),
-        key: paintInfo.length + 1,
         strokeColor,
         strokeWidth,
       };

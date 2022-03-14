@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import React from 'react'
+import React from 'react';
 import { Layer, Line } from 'react-konva';
 
 interface Props {
@@ -22,7 +22,7 @@ const LineLayer: React.FC<Props> = ({ lines }) => {
         />
       ))}
     </Layer>
-  )
-}
+  );
+};
 
-export default LineLayer
+export default LineLayer;

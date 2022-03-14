@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import React from 'react'
+import React from 'react';
 import { Layer, Rect } from 'react-konva';
 
 interface Props {
@@ -24,7 +24,7 @@ const RectangleLayer: React.FC<Props> = ({ rectangles }) => {
         );
       })}
     </Layer>
-  )
-}
+  );
+};
 
-export default RectangleLayer
+export default RectangleLayer;

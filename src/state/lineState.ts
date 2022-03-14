@@ -25,7 +25,7 @@ export const useDrawPencil = () => {
 
   const handlePencilMouseDown = (x: number, y: number) => {
     if (newLine.length === 0) {
-      setNewLine([{ points: [x, y], strokeColor, strokeWidth, closed: false, key: '0' }]);
+      setNewLine([{ key: 0, points: [x, y], strokeColor, strokeWidth, closed: false }]);
     }
   };
 

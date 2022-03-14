@@ -35,13 +35,13 @@ export const useDrawRectangle = () => {
       const startY = newRect[0].y as number;
       setNewRect([
         {
+          key: 0,
           x: startX,
           y: startY,
           width: x - startX,
           height: y - startY,
           strokeColor,
           strokeWidth,
-          key: 0,
         },
       ]);
     }
@@ -52,13 +52,13 @@ export const useDrawRectangle = () => {
       const startX = newRect[0].x as number;
       const startY = newRect[0].y as number;
       const completedRect = {
+        key: paintInfo.length + 1,
         x: startX,
         y: startY,
         width: x - startX,
         height: y - startY,
         strokeColor,
         strokeWidth,
-        key: paintInfo.length + 1,
       };
       setPaintInfo((prev) => prev.concat(completedRect));
       setNewRect([]);
