@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { ColorResult } from 'react-color';
 import { default as ColorPicker } from 'react-color/lib/components/hue/Hue';
@@ -22,12 +22,13 @@ const Tools: React.FC<Props> = ({ strokeColor, drawingType }) => {
     setDrawingType(element.value as DrawingType);
   };
 
-  const handleStrokeColor = (result: ColorResult) => {
+  const handleStrokeColor = useCallback((result: ColorResult) => {
     setStrokeColor(result.hex);
-  };
-  const handleStrokeWidthSlider = (values: number[]) => {
+  }, []);
+
+  const handleStrokeWidthSlider = useCallback((values: number[]) => {
     setStrokeWidth(values);
-  }
+  }, []);
 
   return (
     <>

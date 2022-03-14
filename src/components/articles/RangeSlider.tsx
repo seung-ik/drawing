@@ -10,7 +10,7 @@ const SliderWrapper = styled('div') <{ min: number, max: number, values: number[
   & > .slider-background {
     height: 1rem;
     width: 100%;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     background: ${props =>
     getTrackBackground({
       values: props.values,
@@ -75,4 +75,4 @@ const RangeSlider: React.FC<Props> = ({ min, max, step, values, handleRangeSlide
   />)
 };
 
-export default RangeSlider;
+export default React.memo(RangeSlider);
