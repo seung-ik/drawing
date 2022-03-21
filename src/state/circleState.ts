@@ -1,7 +1,7 @@
 import Konva from 'konva';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
 import { calcDistanceTwoDots } from 'src/utils';
-import { paintInfoState } from './paintInfoState';
+import { paintInfoState, tempPaintInfoState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
 export const newCircleState = atom<Konva.CircleConfig[]>({
@@ -58,6 +58,7 @@ export const useDrawCircle = () => {
         radius: calcDistanceTwoDots(startX, startY, x, y),
         strokeColor,
         strokeWidth,
+        type:'circle',
       };
       setPaintInfo((prev) => prev.concat(completedCircle));
       setNewCircle([]);

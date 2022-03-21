@@ -33,7 +33,7 @@ const PolygonLayer: React.FC<Props> = ({ polygonDots, polygonLine, handleMouseOv
           />
         );
       })}
-      {polygonDots.length !== 0 && (
+      {/* {polygonDots.length !== 0 && (  // 임시선은 언컴플리트로 타입 변경해가면서그리자 따로 상태관리하지말고
         <Line
           key={polygonLine.key}
           points={polygonLine.points}
@@ -41,7 +41,7 @@ const PolygonLayer: React.FC<Props> = ({ polygonDots, polygonLine, handleMouseOv
           strokeWidth={polygonLine.strokeWidth}
           closed={false}
         />
-      )}
+      )} */}
     </Layer>
   );
 };

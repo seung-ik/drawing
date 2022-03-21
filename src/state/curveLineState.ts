@@ -2,7 +2,7 @@ import Konva from 'konva';
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { newLineState } from './lineState';
-import { paintInfoState } from './paintInfoState';
+import { paintInfoState, tempPaintInfoState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
 export const isEndPointHoverState = atom<boolean>({
@@ -28,23 +28,30 @@ export function useDrawCurveLine() {
   const [curveLine, setCurveLine] = useRecoilState(curveLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const setTempLine = useSetRecoilState(newLineState);
+  const [tempPaintInfo, setTempPaintInfo] = useRecoilState(tempPaintInfoState);
 
   const handleCurveLineMouseDown = (x: number, y: number) => {
-    if (isEndPointHover && curveLineDots.length > 2) {
+    if (isEndPointHover && tempPaintInfo.length > 2) {
       const completedCurveLine = {
         ...curveLine,
         key: paintInfo.length + 1,
+        type: 'line',
       };
       setPaintInfo((prev) => prev.concat(completedCurveLine));
       setIsEndPointHover(false);
       setCurveLineDots([]);
       setCurveLine({});
       setTempLine([]);
-    } else if (curveLineDots.length === 0) {
-      setCurveLine({ points: [x, y], strokeColor, strokeWidth, tension: 0.5, bezier: true, key: 0 });
-      setCurveLineDots([{ x, y }]);
-    } else if (curveLineDots.length > 0) {
-      setCurveLineDots((prev) => prev.concat([{ x, y }]));
+      setTempPaintInfo([]); 
+    } else if (tempPaintInfo.length === 0) {
+      setCurveLine({ points: [x, y], strokeColor, strokeWidth, tension: 0.5, bezier: true, key: 0 }); // 이거 페인트 인포에 타입 uncomplte 로 해서 넣자
+      // setCurveLineDots([{ x, y }]);
+      setTempPaintInfo([{ x, y, type: 'tempCircleDot' }]);
+      console.log(1)
+    } else if (tempPaintInfo.length > 0) {
+      console.log(2);
+      // setCurveLineDots((prev) => prev.concat([{ x, y }]));
+      setTempPaintInfo((prev) => prev.concat([{ x, y, type:'tempCircleDot' }]));
       setCurveLine((prev) => {
         const newPoints = prev.points?.concat([x, y]);
         const completedLine = { ...prev, points: newPoints };

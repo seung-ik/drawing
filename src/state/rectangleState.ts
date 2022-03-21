@@ -59,6 +59,7 @@ export const useDrawRectangle = () => {
         height: y - startY,
         strokeColor,
         strokeWidth,
+        type:'rectangle'
       };
       setPaintInfo((prev) => prev.concat(completedRect));
       setNewRect([]);
