@@ -14,6 +14,7 @@ export const linesState = selector<Konva.LineConfig[]>({
     const pvevLines = get(paintInfoState);
     const newLine = get(newLineState);
     return [...pvevLines, ...newLine];
+    // return [...newLine];
   },
 });
 

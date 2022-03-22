@@ -7,7 +7,7 @@ import { polygonDotsState, polygonLineState, useDrawPolygon } from 'src/state/po
 import { drawingTypeState, strokeColorState } from 'src/state/toolState';
 import { circlesState, useDrawCircle } from 'src/state/circleState';
 import { rectanglesState, useDrawRectangle } from 'src/state/rectangleState';
-import { paintInfoState, tempPaintInfoState } from 'src/state/paintInfoState';
+import { paintInfoState, tempDotState } from 'src/state/paintInfoState';
 import { linesState, useDrawLine, useDrawPencil } from 'src/state/lineState';
 import { curveLineDotsState, curveLineState, useDrawCurveLine } from 'src/state/curveLineState';
 import PolygonLayer from './layers/PolygonLayer';
@@ -24,7 +24,7 @@ const Paint = () => {
   const strokeColor = useRecoilValue(strokeColorState);
 
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
-  const [tempPaintInfo,setTempPaintInfo] = useRecoilState(tempPaintInfoState);
+  const [tempDot, setTempDot] = useRecoilState(tempDotState);
   const rectangles = useRecoilValue(rectanglesState);
   const circles = useRecoilValue(circlesState);
   const polygonDots = useRecoilValue(polygonDotsState);
@@ -119,9 +119,9 @@ const Paint = () => {
     sessionStorage.setItem('paintInfo', JSON.stringify(paintInfo));
   }, [paintInfo]);
 
-  useEffect(()=>{
-    setTempPaintInfo([])
-  },[drawingType])
+  useEffect(() => {
+    setTempDot([]);
+  }, [drawingType]);
 
   return (
     <Wrapper>
@@ -133,8 +133,8 @@ const Paint = () => {
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
       >
-        {/* <LineLayer lines={lines} />
-        <RectangleLayer rectangles={rectangles} />
+        <LineLayer lines={lines} />
+        {/* <RectangleLayer rectangles={rectangles} />
         <CircleLayer circles={circles} />
         <CurveLineLayer
           curveLineDots={curveLineDots}
@@ -149,19 +149,19 @@ const Paint = () => {
           handleMouseOut={handlePolygonMouseOut}
         /> */}
         {paintInfo.map((info) => {
-          if (info.type === 'rectangle') {
+          if (info.type === 'rectangle' || info.type === 'tempRectangle') {
             return <RectangleLayer rectangles={[info]} />;
-          } else if (info.type === 'circle') {
+          } else if (info.type === 'circle'|| info.type === 'tempCircle') {
             return <CircleLayer circles={[info]} />;
           } else {
             return <LineLayer lines={[info]} />;
           }
         })}
-        {console.log(tempPaintInfo,'tempPaintInfo')}
-        {tempPaintInfo.map((info, i) => {
+        {console.log(paintInfo,'PaintInfo')}
+        {tempDot.map((info, i) => {
           if (info.type === 'tempCircleDot') {
             const endPointAttr =
-              i === tempPaintInfo.length - 1
+              i === tempDot.length - 1
                 ? {
                     onMouseOver: handleCurveLineMouseOver,
                     onMouseOut: handleCurveLineMouseOut,

@@ -2,7 +2,7 @@ import Konva from 'konva';
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { newLineState } from './lineState';
-import { paintInfoState, tempPaintInfoState } from './paintInfoState';
+import { paintInfoState, tempDotState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
 export const isStartPointHoverState = atom<boolean>({
@@ -24,11 +24,11 @@ export function useDrawPolygon(): any {
   const strokeColor = useRecoilValue(strokeColorState);
   const strokeWidth = useRecoilValue(strokeWidthState)[0];
   const [isStartPointHover, setIsStartPointHover] = useRecoilState(isStartPointHoverState);
-  const [polygonDots, setPolygonDots] = useRecoilState(polygonDotsState);
-  const [polygonLine, setPolygonLine] = useRecoilState(polygonLineState);
+  // const [polygonDots, setPolygonDots] = useRecoilState(polygonDotsState);
+  // const [polygonLine, setPolygonLine] = useRecoilState(polygonLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const setTempLine = useSetRecoilState(newLineState);
-  const [tempPaintInfo, setTempPaintInfo] = useRecoilState(tempPaintInfoState);
+  const [tempDot, setTempDot] = useRecoilState(tempDotState);
 
   const handlePolygonMouseOver = (e: KonvaEventObject<MouseEvent>) => {
     e.target.scale({ x: 2.5, y: 2.5 });
@@ -41,38 +41,45 @@ export function useDrawPolygon(): any {
   };
 
   const handlePolygonMouseDown = (x: number, y: number) => {
-    if (isStartPointHover && tempPaintInfo.length > 2) {
+    if (isStartPointHover && tempDot.length > 2) {
       const completedPolygon = {
-        ...polygonLine,
+        ...paintInfo[paintInfo.length - 1],
         closed: true,
         key: paintInfo.length + 1,
         type: 'line',
       };
-      setPaintInfo((prev) => prev.concat(completedPolygon));
+      setPaintInfo((prev) => prev.slice(0,prev.length - 1).concat(completedPolygon));
       setIsStartPointHover(false);
-      setPolygonDots([]);
-      setPolygonLine({});
       setTempLine([]);
-      setTempPaintInfo([]);
-    } else if (tempPaintInfo.length === 0) {
-      setPolygonLine({ points: [x, y], strokeColor, strokeWidth, closed: false, key: 0 });
-      // setPolygonDots([{ x, y }]);
-      setTempPaintInfo([{ x, y, type: 'tempRectDot' }]);
-    } else if (tempPaintInfo.length > 0) {
-      // setPolygonDots((prev) => prev.concat([{ x, y }]));
-      setTempPaintInfo((prev) => prev.concat([{ x, y, type:'tempRectDot' }]));
-      setPolygonLine((prev) => {
-        const newPoints = prev.points?.concat([x, y]);
-        const completedLine = { ...prev, points: newPoints };
-        return completedLine;
+      setTempDot([]);
+    } else if (tempDot.length === 0) {
+      setTempDot([{ x, y, type: 'tempRectDot' }]);
+      setPaintInfo((prev) =>
+        prev.concat({
+          points: [x, y],
+          strokeColor,
+          strokeWidth,
+          closed: false,
+          key: prev.length + 1,
+          type: 'unCompletedPolygon',
+        }),
+      );
+    } else if (tempDot.length > 0) {
+      setTempDot((prev) => prev.concat([{ x, y, type: 'tempRectDot' }]));
+      setPaintInfo((prev) => {
+        const unCompletedDraw = { ...prev[prev.length - 1] };
+        unCompletedDraw.points = unCompletedDraw.points.concat([x, y]);
+        const newUnCompletedDraw = prev.slice(0, prev.length - 1).concat(unCompletedDraw);
+        return newUnCompletedDraw;
       });
     }
   };
 
   const handlePolygonMouseMove = (x: number, y: number) => {
-    if (polygonDots.length > 0) {
-      const lastPoint = polygonLine.points?.slice(polygonLine.length - 2);
-      setTempLine([{ points: lastPoint?.concat([x, y]), strokeColor, strokeWidth, closed: false, key: 0 }]);
+    if (tempDot.length > 0) {
+      const lastPaint = paintInfo[paintInfo.length - 1];
+      const lastPoint = lastPaint.points.slice(lastPaint.length - 2);
+      setTempLine([{ points: lastPoint.concat([x, y]), strokeColor, strokeWidth, closed: false, key: 0 }]);
     }
   };
 

@@ -1,5 +1,6 @@
 import Konva from 'konva';
 import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import { replaceLastUnit } from 'src/utils';
 import { paintInfoState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
@@ -11,58 +12,54 @@ export const newRectState = atom<Konva.RectConfig[]>({
 export const rectanglesState = selector<Konva.RectConfig[]>({
   key: 'rectangleState/rectanglesState',
   get: ({ get }) => {
-    const prevRects = get(paintInfoState);
     const newRect = get(newRectState);
-    return [...prevRects, ...newRect];
+    return [...newRect];
   },
 });
 
 export const useDrawRectangle = () => {
   const strokeColor = useRecoilValue(strokeColorState);
   const strokeWidth = useRecoilValue(strokeWidthState)[0];
-  const [newRect, setNewRect] = useRecoilState(newRectState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
+  const lastPaint = paintInfo[paintInfo.length - 1];
 
   const handleRectMouseDown = (x: number, y: number) => {
-    if (newRect.length === 0) {
-      setNewRect([{ x, y, width: 0, height: 0, key: 0 }]);
+    const newRect = { x, y, width: 0, height: 0, key: 0, type: 'tempRectangle' };
+    setPaintInfo((prev) => prev.concat(newRect));
+  };
+
+  const handleRectMouseMove = (_x: number, _y: number) => {
+    if (lastPaint.type === 'tempRectangle') {
+      const startX = lastPaint.x as number;
+      const startY = lastPaint.y as number;
+      const tempRect = {
+        ...lastPaint,
+        x: startX,
+        y: startY,
+        width: _x - startX,
+        height: _y - startY,
+        strokeColor,
+        strokeWidth,
+      };
+      setPaintInfo((prev) => replaceLastUnit(prev, tempRect))
     }
   };
 
-  const handleRectMouseMove = (x: number, y: number) => {
-    if (newRect.length === 1) {
-      const startX = newRect[0].x as number;
-      const startY = newRect[0].y as number;
-      setNewRect([
-        {
-          key: 0,
-          x: startX,
-          y: startY,
-          width: x - startX,
-          height: y - startY,
-          strokeColor,
-          strokeWidth,
-        },
-      ]);
-    }
-  };
-
-  const handleRectMouseUp = (x: number, y: number) => {
-    if (newRect.length === 1) {
-      const startX = newRect[0].x as number;
-      const startY = newRect[0].y as number;
+  const handleRectMouseUp = (_x: number, _y: number) => {
+    if (lastPaint.type === 'tempRectangle') {
+      const startX = lastPaint.x as number;
+      const startY = lastPaint.y as number;
       const completedRect = {
         key: paintInfo.length + 1,
         x: startX,
         y: startY,
-        width: x - startX,
-        height: y - startY,
+        width: _x - startX,
+        height: _y - startY,
         strokeColor,
         strokeWidth,
         type:'rectangle'
       };
-      setPaintInfo((prev) => prev.concat(completedRect));
-      setNewRect([]);
+      setPaintInfo((prev) => replaceLastUnit(prev, completedRect))
     }
   };
 
