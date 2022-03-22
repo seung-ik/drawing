@@ -14,6 +14,7 @@ export const linesState = selector<Konva.LineConfig[]>({
     const pvevLines = get(paintInfoState);
     const newLine = get(newLineState);
     return [...pvevLines, ...newLine];
+    // return [...newLine];
   },
 });
 
@@ -41,7 +42,7 @@ export const useDrawPencil = () => {
 
   const handlePencilMouseUp = (x: number, y: number) => {
     if (newLine.length === 1) {
-      const completedLine = [{ ...newLine[0], key: paintInfo.length + 1 }];
+      const completedLine = [{ ...newLine[0], key: paintInfo.length + 1, type: 'line' }];
       setPaintInfo((prev) => prev.concat(completedLine));
       setNewLine([]);
     }

@@ -5,11 +5,11 @@ import { KonvaEventObject } from 'konva/lib/Node';
 
 interface Props {
   curveLineDots: Konva.CircleConfig[];
-  curveLine: Konva.LineConfig;
+  // curveLine: Konva.LineConfig;
   handleMouseOver: (e: KonvaEventObject<MouseEvent>) => void;
   handleMouseOut: (e: KonvaEventObject<MouseEvent>) => void;
 }
-const CurveLineLayer: React.FC<Props> = ({ curveLineDots, curveLine, handleMouseOver, handleMouseOut }) => {
+const CurveLineLayer: React.FC<Props> = ({ curveLineDots, handleMouseOver, handleMouseOut }) => {
   return (
     <Layer>
       {curveLineDots.map((value, i) => {
@@ -24,7 +24,7 @@ const CurveLineLayer: React.FC<Props> = ({ curveLineDots, curveLine, handleMouse
           <Circle key={value.key} x={value.x} y={value.y} radius={10} fill="white" stroke="black" {...endPointAttr} />
         );
       })}
-      {curveLineDots.length !== 0 && (
+      {/* {curveLineDots.length !== 0 && (
         <Line
           key={curveLine.key}
           points={curveLine.points}
@@ -33,7 +33,7 @@ const CurveLineLayer: React.FC<Props> = ({ curveLineDots, curveLine, handleMouse
           closed={false}
           tension={0.5}
         />
-      )}
+      )} */}
     </Layer>
   );
 };

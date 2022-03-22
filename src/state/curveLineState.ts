@@ -2,7 +2,7 @@ import Konva from 'konva';
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { KonvaEventObject } from 'konva/lib/Node';
 import { newLineState } from './lineState';
-import { paintInfoState } from './paintInfoState';
+import { paintInfoState, tempDotState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
 export const isEndPointHoverState = atom<boolean>({
@@ -24,40 +24,54 @@ export function useDrawCurveLine() {
   const strokeColor = useRecoilValue(strokeColorState);
   const strokeWidth = useRecoilValue(strokeWidthState)[0];
   const [isEndPointHover, setIsEndPointHover] = useRecoilState(isEndPointHoverState);
-  const [curveLineDots, setCurveLineDots] = useRecoilState(curveLineDotsState);
-  const [curveLine, setCurveLine] = useRecoilState(curveLineState);
+  // const [curveLineDots, setCurveLineDots] = useRecoilState(curveLineDotsState);
+  // const [curveLine, setCurveLine] = useRecoilState(curveLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const setTempLine = useSetRecoilState(newLineState);
+  const [tempDot, setTempDot] = useRecoilState(tempDotState);
 
   const handleCurveLineMouseDown = (x: number, y: number) => {
-    if (isEndPointHover && curveLineDots.length > 2) {
+    if (isEndPointHover && tempDot.length > 2) {
       const completedCurveLine = {
-        ...curveLine,
+        ...paintInfo[paintInfo.length - 1],
         key: paintInfo.length + 1,
+        type: 'line',
       };
       setPaintInfo((prev) => prev.concat(completedCurveLine));
       setIsEndPointHover(false);
-      setCurveLineDots([]);
-      setCurveLine({});
       setTempLine([]);
-    } else if (curveLineDots.length === 0) {
-      setCurveLine({ points: [x, y], strokeColor, strokeWidth, tension: 0.5, bezier: true, key: 0 });
-      setCurveLineDots([{ x, y }]);
-    } else if (curveLineDots.length > 0) {
-      setCurveLineDots((prev) => prev.concat([{ x, y }]));
-      setCurveLine((prev) => {
-        const newPoints = prev.points?.concat([x, y]);
-        const completedLine = { ...prev, points: newPoints };
-        return completedLine;
+      setTempDot([]); 
+    } else if (tempDot.length === 0) {
+      setTempDot([{ x, y, type: 'tempCircleDot' }]);
+      setPaintInfo((prev) =>
+        prev.concat({
+          points: [x, y],
+          strokeColor,
+          strokeWidth,
+          tension: 0.5,
+          bezier: false,
+          key: prev.length + 1,
+          type: 'unCompletedCurve',
+        }),
+      );
+    } else if (tempDot.length > 0) {
+      setTempDot((prev) => prev.concat([{ x, y, type:'tempCircleDot' }]));
+      setPaintInfo((prev) => {
+        const unCompletedDraw = { ...prev[prev.length - 1] };
+        unCompletedDraw.points = unCompletedDraw.points.concat([x, y]); 
+        const newUnCompletedDraw = prev.slice(0,prev.length - 1).concat(unCompletedDraw);
+        return newUnCompletedDraw;
       });
     }
   };
 
   const handleCurveLineMouseMove = (x: number, y: number) => {
-    if (curveLineDots.length > 0) {
-      const lastPoint = curveLine.points;
+    if (tempDot.length > 0) {
+      console.log(tempDot.length,"length");
+      const lastPaint = paintInfo[paintInfo.length - 1];
+      const lastPoint = lastPaint.points;
       setTempLine([
-        { points: lastPoint?.concat([x, y]), strokeColor, strokeWidth, tension: 0.5, bezier: true, key: 0 },
+        { points: lastPoint.concat([x, y]), strokeColor, strokeWidth, tension: 0.5, bezier: true, key: 0 },
       ]);
     }
   };

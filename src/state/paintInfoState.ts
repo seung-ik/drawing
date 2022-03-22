@@ -8,6 +8,11 @@ export const paintInfoState = atom<DrawConfig[]>({
   default: [],
 });
 
+export const tempDotState = atom<DrawConfig[]>({
+  key: 'paintInfoState/tempDotState',
+  default: [],
+});
+
 export const undoListState = atom<DrawConfig[]>({
   key: 'paintInfoState/undoList',
   default: [],
