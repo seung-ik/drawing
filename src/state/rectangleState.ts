@@ -4,19 +4,6 @@ import { replaceLastUnit } from 'src/utils';
 import { paintInfoState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
-export const newRectState = atom<Konva.RectConfig[]>({
-  key: 'rectangleState/newRect',
-  default: [],
-});
-
-export const rectanglesState = selector<Konva.RectConfig[]>({
-  key: 'rectangleState/rectanglesState',
-  get: ({ get }) => {
-    const newRect = get(newRectState);
-    return [...newRect];
-  },
-});
-
 export const useDrawRectangle = () => {
   const strokeColor = useRecoilValue(strokeColorState);
   const strokeWidth = useRecoilValue(strokeWidthState)[0];

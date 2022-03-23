@@ -1,23 +1,13 @@
 import Konva from 'konva';
 import { atom, useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { KonvaEventObject } from 'konva/lib/Node';
-import { newLineState } from './lineState';
+import { tempLineState } from './lineState';
 import { paintInfoState, tempDotState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
 export const isEndPointHoverState = atom<boolean>({
   key: 'curveLineState/isEndPointHover',
   default: false,
-});
-
-export const curveLineDotsState = atom<Konva.CircleConfig[]>({
-  key: 'curveLineState/curveLinesDots',
-  default: [],
-});
-
-export const curveLineState = atom<Konva.LineConfig>({
-  key: 'curveLineState/curveLineState',
-  default: {},
 });
 
 export function useDrawCurveLine() {
@@ -27,7 +17,7 @@ export function useDrawCurveLine() {
   // const [curveLineDots, setCurveLineDots] = useRecoilState(curveLineDotsState);
   // const [curveLine, setCurveLine] = useRecoilState(curveLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
-  const setTempLine = useSetRecoilState(newLineState);
+  const setTempLine = useSetRecoilState(tempLineState);
   const [tempDot, setTempDot] = useRecoilState(tempDotState);
 
   const handleCurveLineMouseDown = (x: number, y: number) => {

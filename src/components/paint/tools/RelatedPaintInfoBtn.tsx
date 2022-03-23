@@ -1,13 +1,13 @@
 import React from 'react'
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import { newLineState } from 'src/state/lineState';
+import { tempLineState } from 'src/state/lineState';
 import { paintInfoState, tempDotState, undoListState } from 'src/state/paintInfoState';
 import { Buttons } from '../Paint.style'
 
 const RelatedPaintInfoBtn = () => {
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const [tenoPaintInfo, setTempDot] = useRecoilState(tempDotState);
-  const setTempLine = useSetRecoilState(newLineState);
+  const setTempLine = useSetRecoilState(tempLineState);
   const [undoList, setUndoList] = useRecoilState(undoListState);
   const isCanUndo = paintInfo.length > 0 && undoList.length < 40;
   const isCanRedo = undoList.length > 0;
