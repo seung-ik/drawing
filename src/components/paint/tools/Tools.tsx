@@ -12,6 +12,7 @@ interface Props {
   drawingType: DrawingType;
 }
 
+let debounceTimer: any;
 const Tools: React.FC<Props> = ({ strokeColor, drawingType }) => {
   const setDrawingType = useSetRecoilState(drawingTypeState);
   const setStrokeColor = useSetRecoilState(strokeColorState);
@@ -23,11 +24,17 @@ const Tools: React.FC<Props> = ({ strokeColor, drawingType }) => {
   };
 
   const handleStrokeColor = useCallback((result: ColorResult) => {
-    setStrokeColor(result.hex);
-  }, []);
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      setStrokeColor(result.hex);
+    }, 100);
+  },[]);
 
   const handleStrokeWidthSlider = useCallback((values: number[]) => {
-    setStrokeWidth(values);
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      setStrokeWidth(values);
+    }, 100);
   }, []);
 
   return (
