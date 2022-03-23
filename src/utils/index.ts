@@ -3,5 +3,5 @@ export const calcDistanceTwoDots = (x1: number, y1: number, x2: number, y2: numb
 };
 
 export function replaceLastUnit<T>(array: T[], newUnit: T): T[] {
-  return array.slice(array.length-1).concat(newUnit);
+  return array.slice(0, array.length - 1).concat(newUnit);
 }

@@ -3,18 +3,16 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import Konva from 'konva';
 import { Layer, Stage, Circle, Rect } from 'react-konva';
 import useWindowSize from 'src/hooks/useWindowResize';
-import { polygonDotsState, polygonLineState, useDrawPolygon } from 'src/state/polygonState';
+import { useDrawPolygon } from 'src/state/polygonState';
 import { drawingTypeState, strokeColorState } from 'src/state/toolState';
-import { circlesState, useDrawCircle } from 'src/state/circleState';
-import { rectanglesState, useDrawRectangle } from 'src/state/rectangleState';
+import { useDrawCircle } from 'src/state/circleState';
+import { useDrawRectangle } from 'src/state/rectangleState';
 import { paintInfoState, tempDotState } from 'src/state/paintInfoState';
 import { linesState, useDrawLine, useDrawPencil } from 'src/state/lineState';
-import { curveLineDotsState, curveLineState, useDrawCurveLine } from 'src/state/curveLineState';
-import PolygonLayer from './layers/PolygonLayer';
+import { useDrawCurveLine } from 'src/state/curveLineState';
 import LineLayer from './layers/LineLayer';
 import RectangleLayer from './layers/RectangleLayer';
 import CircleLayer from './layers/CircleLayer';
-import CurveLineLayer from './layers/CurveLineLayer';
 import Tools from './tools/Tools';
 import { Wrapper } from './Paint.style';
 
@@ -25,12 +23,6 @@ const Paint = () => {
 
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const [tempDot, setTempDot] = useRecoilState(tempDotState);
-  const rectangles = useRecoilValue(rectanglesState);
-  const circles = useRecoilValue(circlesState);
-  const polygonDots = useRecoilValue(polygonDotsState);
-  const polygonLine = useRecoilValue(polygonLineState);
-  const curveLineDots = useRecoilValue(curveLineDotsState);
-  const curveLine = useRecoilValue(curveLineState);
   const lines = useRecoilValue(linesState);
 
   const { handlePencilMouseDown, handlePencilMouseMove, handlePencilMouseUp } = useDrawPencil();
@@ -134,20 +126,6 @@ const Paint = () => {
         onMouseup={handleMouseUp}
       >
         <LineLayer lines={lines} />
-        {/* <RectangleLayer rectangles={rectangles} />
-        <CircleLayer circles={circles} />
-        <CurveLineLayer
-          curveLineDots={curveLineDots}
-          curveLine={curveLine}
-          handleMouseOver={handleCurveLineMouseOver}
-          handleMouseOut={handleCurveLineMouseOut}
-        />
-        <PolygonLayer
-          polygonDots={polygonDots}
-          polygonLine={polygonLine}
-          handleMouseOver={handlePolygonMouseOver}
-          handleMouseOut={handlePolygonMouseOut}
-        /> */}
         {paintInfo.map((info) => {
           if (info.type === 'rectangle' || info.type === 'tempRectangle') {
             return <RectangleLayer rectangles={[info]} />;
