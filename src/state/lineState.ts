@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import { atom, useRecoilState, useRecoilValue } from 'recoil';
 import { paintInfoState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
@@ -8,20 +8,9 @@ export const tempLineState = atom<Konva.LineConfig[]>({
   default: [],
 });
 
-export const linesState = selector<Konva.LineConfig[]>({
-  key: 'lineState/lines',
-  get: ({ get }) => {
-    const pvevLines = get(paintInfoState);
-    const newLine = get(tempLineState);
-    return [...pvevLines, ...newLine];
-    // return [...newLine];
-  },
-});
-
 export const useDrawPencil = () => {
   const strokeColor = useRecoilValue(strokeColorState);
   const strokeWidth = useRecoilValue(strokeWidthState)[0];
-  // const [newLine, setNewLine] = useRecoilState(newLineState);
   const [tempLine, setTempLine] = useRecoilState(tempLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
 

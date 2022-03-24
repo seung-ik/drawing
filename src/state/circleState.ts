@@ -1,7 +1,7 @@
 import Konva from 'konva';
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { calcDistanceTwoDots, replaceLastUnit } from 'src/utils';
-import { paintInfoState, tempDotState } from './paintInfoState';
+import { paintInfoState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';
 
 export const useDrawCircle = () => {
@@ -14,7 +14,7 @@ export const useDrawCircle = () => {
     const newCircle = { x, y, radius: 0, type: 'tempCircle', key: 0 };
     setPaintInfo((prev) => prev.concat(newCircle));
   };
-  // TODO:move 에도 디바운싱 해주면 좋을듯?
+  
   const handleCircleMouseMove = (_x: number, _y: number) => {
     if (lastPaint.type === 'tempCircle') {
       const startX = lastPaint.x as number;

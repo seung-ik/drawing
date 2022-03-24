@@ -14,11 +14,9 @@ export function useDrawCurveLine() {
   const strokeColor = useRecoilValue(strokeColorState);
   const strokeWidth = useRecoilValue(strokeWidthState)[0];
   const [isEndPointHover, setIsEndPointHover] = useRecoilState(isEndPointHoverState);
-  // const [curveLineDots, setCurveLineDots] = useRecoilState(curveLineDotsState);
-  // const [curveLine, setCurveLine] = useRecoilState(curveLineState);
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
-  const setTempLine = useSetRecoilState(tempLineState);
   const [tempDot, setTempDot] = useRecoilState(tempDotState);
+  const setTempLine = useSetRecoilState(tempLineState);
 
   const handleCurveLineMouseDown = (x: number, y: number) => {
     if (isEndPointHover && tempDot.length > 2) {

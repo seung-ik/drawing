@@ -8,7 +8,7 @@ import { drawingTypeState, strokeColorState } from 'src/state/toolState';
 import { useDrawCircle } from 'src/state/circleState';
 import { useDrawRectangle } from 'src/state/rectangleState';
 import { paintInfoState, tempDotState } from 'src/state/paintInfoState';
-import { linesState, useDrawLine, useDrawPencil } from 'src/state/lineState';
+import { tempLineState, useDrawLine, useDrawPencil } from 'src/state/lineState';
 import { useDrawCurveLine } from 'src/state/curveLineState';
 import LineLayer from './layers/LineLayer';
 import RectangleLayer from './layers/RectangleLayer';
@@ -23,7 +23,7 @@ const Paint = () => {
 
   const [paintInfo, setPaintInfo] = useRecoilState(paintInfoState);
   const [tempDot, setTempDot] = useRecoilState(tempDotState);
-  const lines = useRecoilValue(linesState);
+  const tempLine = useRecoilValue(tempLineState);
 
   const { handlePencilMouseDown, handlePencilMouseMove, handlePencilMouseUp } = useDrawPencil();
   const { handleLineMouseDown, handleLineMouseMove } = useDrawLine();
@@ -125,7 +125,6 @@ const Paint = () => {
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
       >
-        <LineLayer lines={lines} />
         {paintInfo.map((info) => {
           if (info.type === 'rectangle' || info.type === 'tempRectangle') {
             return <RectangleLayer rectangles={[info]} />;
@@ -182,9 +181,10 @@ const Paint = () => {
                 />
               </Layer>
             );
-          } else {
-            return <LineLayer lines={[info]} />;
           }
+        })}
+        {tempLine.map((info)=>{
+          return <LineLayer lines={[info]} />
         })}
       </Stage>
       <div className="tools">
