@@ -1,5 +1,4 @@
-import Konva from 'konva';
-import { atom, selector, useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { replaceLastUnit } from 'src/utils';
 import { paintInfoState } from './paintInfoState';
 import { strokeColorState, strokeWidthState } from './toolState';

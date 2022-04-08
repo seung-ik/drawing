@@ -1,5 +1,7 @@
 import React from 'react'
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom'
+import { fetchTicker } from 'src/api';
 import styled from 'styled-components';
 
 const Wrapper = styled('div')`
@@ -11,6 +13,10 @@ const Wrapper = styled('div')`
 `;
 
 const Trade = () => {
+  const { isLoading, data } = useQuery<unknown, any>(['ticker'], () => fetchTicker());
+
+  console.log(isLoading, data);
+
   return (
     <Wrapper>
       <span>트레이드</span>
@@ -18,7 +24,7 @@ const Trade = () => {
         <button>페인트</button>
       </Link>
     </Wrapper>
-  )
+  );
 }
 
 export default Trade
