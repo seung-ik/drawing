@@ -6,6 +6,7 @@ import RangeSlider from 'src/components/articles/RangeSlider';
 import { DrawingType, drawingTypeState, DRAWING_TYPE, strokeColorState, strokeWidthState } from 'src/state/toolState';
 import { Buttons, Options } from '../Paint.style';
 import RelatedPaintInfoBtn from './RelatedPaintInfoBtn';
+import { Link } from 'react-router-dom';
 
 interface Props {
   strokeColor: string;
@@ -50,6 +51,9 @@ const Tools: React.FC<Props> = ({ strokeColor, drawingType }) => {
           </button>
         ))}
       </Buttons>
+      <Link to="/trade">
+        <button>트레이드</button>
+      </Link>
       <RelatedPaintInfoBtn />
     </>
   );

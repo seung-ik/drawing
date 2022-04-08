@@ -7,7 +7,6 @@ export const GlobalStyle = createGlobalStyle`
   body {
     overflow: scroll;
     height: 100vh;
-    border: 1px solid yellow;
   }
 
   * {
