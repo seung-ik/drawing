@@ -125,6 +125,9 @@ const Paint = () => {
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
       >
+        {tempLine.map((info)=>{
+          return <LineLayer lines={[info]} />
+        })}
         {paintInfo.map((info) => {
           if (info.type === 'rectangle' || info.type === 'tempRectangle') {
             return <RectangleLayer rectangles={[info]} />;
@@ -183,9 +186,7 @@ const Paint = () => {
             );
           }
         })}
-        {tempLine.map((info)=>{
-          return <LineLayer lines={[info]} />
-        })}
+        
       </Stage>
       <div className="tools">
         <Tools strokeColor={strokeColor} drawingType={drawingType} />
