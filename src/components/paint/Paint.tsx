@@ -125,9 +125,6 @@ const Paint = () => {
         onMousemove={handleMouseMove}
         onMouseup={handleMouseUp}
       >
-        {tempLine.map((info)=>{
-          return <LineLayer lines={[info]} />
-        })}
         {paintInfo.map((info) => {
           if (info.type === 'rectangle' || info.type === 'tempRectangle') {
             return <RectangleLayer rectangles={[info]} />;
@@ -138,6 +135,9 @@ const Paint = () => {
           }
         })}
         {console.log(paintInfo,'PaintInfo')}
+        {tempLine.map((info)=>{
+          return <LineLayer lines={[info]} />
+        })}
         {tempDot.map((info, i) => {
           if (info.type === 'tempCircleDot') {
             const endPointAttr =
