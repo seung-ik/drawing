@@ -1,7 +1,7 @@
 import React from 'react'
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom'
-import { fetchTicker } from 'src/api';
+import { fetchAssetStatus, fetchOrderbook, fetchTicker, fetchTransactionHistory } from 'src/api';
 import styled from 'styled-components';
 
 const Wrapper = styled('div')`
@@ -13,9 +13,15 @@ const Wrapper = styled('div')`
 `;
 
 const Trade = () => {
-  const { isLoading, data } = useQuery<unknown, any>(['ticker'], () => fetchTicker());
+  const { isLoading: is1Loading, data: tickerData } = useQuery<any, Error>(['ticker'], () => fetchTicker());
+  const { isLoading: is2Loading, data: orderBookData } = useQuery<any, Error>(['orderbook'], () => fetchOrderbook());
+  const { isLoading: is3Loading, data: transactionData } = useQuery<any, Error>(['transaction'], () => fetchTransactionHistory());
+  const { isLoading: is4Loading, data: assetData } = useQuery<any, Error>(['asset'], () => fetchAssetStatus());
 
-  console.log(isLoading, data);
+  console.log(is1Loading, tickerData, 1);
+  console.log(is2Loading, orderBookData, 2);
+  console.log(is3Loading, transactionData,3);
+  console.log(is4Loading, assetData, 4);
 
   return (
     <Wrapper>
