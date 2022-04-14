@@ -128,28 +128,28 @@ const Paint = () => {
         {paintInfo.map((info) => {
           if (info.type === 'rectangle' || info.type === 'tempRectangle') {
             return <RectangleLayer rectangles={[info]} />;
-          } else if (info.type === 'circle'|| info.type === 'tempCircle') {
+          } else if (info.type === 'circle' || info.type === 'tempCircle') {
             return <CircleLayer circles={[info]} />;
           } else {
             return <LineLayer lines={[info]} />;
           }
         })}
-        {console.log(paintInfo,'PaintInfo')}
-        {tempLine.map((info)=>{
-          return <LineLayer lines={[info]} />
+        {console.log(tempLine)}
+        {tempLine.map((info, i) => {
+          return <LineLayer key={info.key} lines={[info]} />
         })}
         {tempDot.map((info, i) => {
           if (info.type === 'tempCircleDot') {
             const endPointAttr =
               i === tempDot.length - 1
                 ? {
-                    onMouseOver: handleCurveLineMouseOver,
-                    onMouseOut: handleCurveLineMouseOut,
-                  }
+                  onMouseOver: handleCurveLineMouseOver,
+                  onMouseOut: handleCurveLineMouseOut,
+                }
                 : null;
 
             return (
-              <Layer>
+              <Layer key={info.key}>
                 <Circle
                   key={info.key}
                   x={info.x}
@@ -165,9 +165,9 @@ const Paint = () => {
             const startPointAttr =
               i === 0
                 ? {
-                    onMouseOver: handlePolygonMouseOver,
-                    onMouseOut: handlePolygonMouseOut,
-                  }
+                  onMouseOver: handlePolygonMouseOver,
+                  onMouseOut: handlePolygonMouseOut,
+                }
                 : null;
 
             return (
@@ -186,7 +186,7 @@ const Paint = () => {
             );
           }
         })}
-        
+
       </Stage>
       <div className="tools">
         <Tools strokeColor={strokeColor} drawingType={drawingType} />
