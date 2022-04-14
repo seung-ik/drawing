@@ -18,7 +18,7 @@ ReactDOM.render(
         <RecoilRoot>
           <GlobalStyle />
           <App />
-          {isDevelopmentEnv && <ReactQueryDevtools initialIsOpen={false}/>}
+          {isDevelopmentEnv && <ReactQueryDevtools initialIsOpen={false} position="bottom-right" />}
         </RecoilRoot>
       </BrowserRouter>
     </QueryClientProvider>
