@@ -17,14 +17,12 @@ const Wrapper = styled('div')`
 
 const Trade = () => {
   const [ticker, setTicker] = useRecoilState(tickerState);
-  const { isLoading: is1Loading, data: tickerData } = useQuery<any, Error>('ticker', () => fetchTicker());
-  // const { isLoading: is2Loading, data: orderBookData } = useQuery<any, Error>(['orderbook'], () => fetchOrderbook());
-  // const { isLoading: is3Loading, data: transactionData } = useQuery<any, Error>(['transaction'], () => fetchTransactionHistory());
-  // const { isLoading: is4Loading, data: assetData } = useQuery<any, Error>(['asset'], () => fetchAssetStatus());
+  //TODO: useQueiries 로 묶어보기 , 동기적으로 처리해보기
+  const { isLoading: is1Loading, data: tickerData } = useQuery<any, Error>(['ticker'], () => fetchTicker());
+  const { isLoading: is2Loading, data: orderBookData } = useQuery<any, Error>(['orderbook'], () => fetchOrderbook());
+  const { isLoading: is3Loading, data: transactionData } = useQuery<any, Error>(['transaction'], () => fetchTransactionHistory());
+  const { isLoading: is4Loading, data: assetData } = useQuery<any, Error>(['asset'], () => fetchAssetStatus());
 
-<<<<<<< HEAD
-  const normalizeTickerData = (originals: any) => {
-=======
   console.log('test');
   const objectA = {
     a: {
@@ -48,7 +46,6 @@ const Trade = () => {
 
   console.log(is1Loading, tickerData.data, 1);
   const parseTickerData = (originals: any) => {
->>>>>>> 2c22e50 (Add todo (usequery))
     const array = [];
     for (const element in originals) {
       array.push(element);
@@ -57,12 +54,7 @@ const Trade = () => {
   };
 
   useEffect(() => {
-    console.log("durl")
-    if (tickerData) {
-      setTicker(normalizeTickerData(tickerData.data))
-    }
-    console.log(tickerData);
-
+    setTicker(parseTickerData(tickerData.data))
   }, []);
 
   // console.log(is2Loading, orderBookData, 2);
@@ -75,16 +67,6 @@ const Trade = () => {
       <Link to="/">
         <button>페인트</button>
       </Link>
-<<<<<<< HEAD
-      {console.log(ticker)}
-      {ticker?.AllSymbol.map((symbol: any) => {
-        return (
-          <div>{symbol}</div>
-        )
-      })}
-
-=======
->>>>>>> 2c22e50 (Add todo (usequery))
     </Wrapper>
   );
 }
