@@ -45,7 +45,7 @@ const Trade = () => {
   console.log(isEqual(objectA,objectB));
 
   console.log(is1Loading, tickerData.data, 1);
-  const parseTickerData = (originals: any) => {
+  const normalizeTickerData = (originals: any) => {
     const array = [];
     for (const element in originals) {
       array.push(element);
@@ -54,7 +54,12 @@ const Trade = () => {
   };
 
   useEffect(() => {
-    setTicker(parseTickerData(tickerData.data))
+    console.log("durl")
+    if (tickerData) {
+      setTicker(normalizeTickerData(tickerData.data))
+    }
+    console.log(tickerData);
+
   }, []);
 
   // console.log(is2Loading, orderBookData, 2);
